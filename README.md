@@ -3,26 +3,42 @@
 ## Setup
 > Initial setup will take like 20 minutes thanks to ungodly amount of dependencies for both `bevy` and `wasm-server-runner`
 
-### Setup native developing environment
+### Native
 1. Run `cargo build` and wait for all of the 334 dependencies to compile
 2. `cargo run`
 
-### Setup web-assembly developing environment
-1. Download wasm-runner `cargo install wasm-server-runner`
-2. Use the wasm-runner `export CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUNNER=wasm-server-runner`
+### Web-assembly
+1. Download trunk `cargo install --locked trunk` and wait for 490 depencies to compile
 3. Compile to wasm: `cargo build --target wasm32-unknown-unknown`
-4. Setup localhost wasm-server: `cargo run --target wasm32-unknown-unknown` 
-5. Or if you are (for some reason) on Windows: `wasm-server-runner \target\wasm32-unknown-unknown\debug\GGJ-2024.wasm`
-6. Wasm is now hosted on `http://127.0.0.1:1334`
+4. Setup localhost wasm-server: `trunk serve`
 
-## TODO
-- Use `trunk` as wasm-runner instead
+### Deploying
+1. Create a new tag in the GitHub repo
+2. Create a new release with the new tag
+3. Set to pre-release
+4. Wasm build of the game can be found on github pages
+
 
 ## CI/CD pipeline
-~~Copy and pasted~~ inspired by: https://plippe.github.io/blog/2021/07/12/rust-wasm-github.html
 
-Documentation for actions:
+### Documentation for actions:
 - https://github.com/actions-rs/toolchain
 - https://github.com/jetli/wasm-bindgen-action
 - https://github.com/jetli/trunk-action
 - https://github.com/peaceiris/actions-gh-pages (this one for some reason really just loves to just break)
+
+### Reasons for why the workflow has imploded...
+- cd pipeline didn't feel like triggering due to invalid configuration
+- tried to fix said issue and in the process got GitHub actions into endless loop
+- fixed said issue but GitHub decided that it still wants to use the old config for god knows what reason
+- has to change configuration file name to get it to work again
+- runs, but skips the publishing job despite correct configuration according to documentation
+- GitHub apparently defaults to 'main' branch even if the config would be set to use 'master' branch
+- now we use 'main' instead of 'master'
+- still skips the publishing job for some reason
+- just remove the branch safety check, who needs that anyways
+- job failes due to permission issues
+- documentation recommended fix ends up not fixing the problem
+- "just give full permissions to all actions"
+- turns out I had forgotten to specify enviroment secret
+- random mime-type error on the GitHub pages

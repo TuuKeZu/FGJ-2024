@@ -1,5 +1,6 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use bevy::{input::common_conditions::input_toggle_active, prelude::*, window::PrimaryWindow};
+use bevy_egui::{egui, EguiContext, EguiPlugin};
+use bevy_inspector_egui::{bevy_inspector, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 
 fn main() {
@@ -7,10 +8,19 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugins(RapierDebugRenderPlugin::default())
-        .add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(EguiPlugin)
+        .add_plugins(DefaultInspectorConfigPlugin)
+        .add_systems(
+            Update,
+            world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
+        )
+        .add_systems(
+            Update,
+            entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
+        )
         .add_systems(Startup, setup_graphics)
         .add_systems(Startup, setup_physics)
-        .add_systems(Update, print_ball_altitude)
+        .add_systems(Update, show_ball_position)
         .run();
 }
 
@@ -33,8 +43,51 @@ fn setup_physics(mut commands: Commands) {
         .insert(TransformBundle::from(Transform::from_xyz(0.0, 400.0, 0.0)));
 }
 
-fn print_ball_altitude(positions: Query<&Transform, With<RigidBody>>) {
-    // for transform in positions.iter() {
-    //     println!("Ball altitude: {}", transform.translation.y);
-    // }
+fn show_ball_position(
+    mut egui_context: Query<&mut EguiContext, With<PrimaryWindow>>,
+    positions: Query<&Transform, With<RigidBody>>,
+) {
+    let mut egui_context = egui_context.single_mut();
+    egui::Window::new("Ball").show(egui_context.get_mut(), |ui| {
+        for transform in positions.iter() {
+            egui::Grid::new("position").show(ui, |ui| {
+                ui.label("");
+                ui.label("X");
+                ui.label("Y");
+                ui.end_row();
+                ui.label("Position");
+                ui.label(format!("{:4.1}", transform.translation.x));
+                ui.label(format!("{:4.1}", transform.translation.y));
+            });
+        }
+    });
+}
+
+// Inspectors for debugging
+fn world_inspector(world: &mut World) {
+    let mut egui_context = world
+        .query_filtered::<&mut EguiContext, With<PrimaryWindow>>()
+        .single(world)
+        .clone();
+
+    egui::Window::new("World").show(egui_context.get_mut(), |ui| {
+        egui::ScrollArea::both().show(ui, |ui| {
+            bevy_inspector::ui_for_world(world, ui);
+            ui.allocate_space(ui.available_size());
+        })
+    });
+}
+
+fn entity_inspector(world: &mut World) {
+    let mut egui_context = world
+        .query_filtered::<&mut EguiContext, With<PrimaryWindow>>()
+        .single(world)
+        .clone();
+
+    egui::Window::new("Entities").show(egui_context.get_mut(), |ui| {
+        egui::ScrollArea::both().show(ui, |ui| {
+            bevy_inspector::ui_for_world_entities(world, ui);
+            ui.allocate_space(ui.available_size());
+        })
+    });
 }

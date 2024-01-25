@@ -4,7 +4,7 @@
 > Initial setup will take like 20 minutes thanks to ungodly amount of dependencies for both `bevy` and `wasm-server-runner`
 
 ### Native
-1. Run `cargo build` and wait for all of the 334 dependencies to compile
+1. Run `cargo build` and wait for all of the 362 dependencies to compile
 2. `cargo run`
 
 ### Web-assembly

@@ -17,3 +17,12 @@
 
 ## TODO
 - Use `trunk` as wasm-runner instead
+
+## CI/CD pipeline
+~~Copy and pasted~~ inspired by: https://plippe.github.io/blog/2021/07/12/rust-wasm-github.html
+
+Documentation for actions:
+- https://github.com/actions-rs/toolchain
+- https://github.com/jetli/wasm-bindgen-action
+- https://github.com/jetli/trunk-action
+- https://github.com/peaceiris/actions-gh-pages (this one for some reason really just loves to just break)

@@ -20,7 +20,7 @@
 
 
 ## CI/CD pipeline
-
+> Latest build available on https://tuukezu.github.io/FGJ-2024/
 ### Documentation for actions:
 - https://github.com/actions-rs/toolchain
 - https://github.com/jetli/wasm-bindgen-action
@@ -37,9 +37,13 @@
 - now we use 'main' instead of 'master'
 - still skips the publishing job for some reason
 - just remove the branch safety check, who needs that anyways
+- fails due to missing 'index.html' file
+- also move to using 'trunk' because GitHub actions uses it
 - job failes due to permission issues
 - documentation recommended fix ends up not fixing the problem
 - "just give full permissions to all actions"
 - turns out I had forgotten to specify enviroment secret
 - random mime-type error on the GitHub pages
 - tried to resolve that, now it failed to generate any artifacts
+- turns out GitHub pages disliked the trunk generated 'index.html' paths
+- found documentation for Trunk.toml and resolved that issue

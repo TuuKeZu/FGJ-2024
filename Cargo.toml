@@ -20,4 +20,6 @@ opt-level = 3
 
 [dependencies]
 bevy = "0.12.1"
+bevy-inspector-egui = "0.22.1"
+bevy_egui = { version = "0.24.0", features = ["serde"] }
 bevy_rapier2d = "0.23.0"

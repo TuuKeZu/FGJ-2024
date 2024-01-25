@@ -42,3 +42,4 @@
 - "just give full permissions to all actions"
 - turns out I had forgotten to specify enviroment secret
 - random mime-type error on the GitHub pages
+- tried to resolve that, now it failed to generate any artifacts

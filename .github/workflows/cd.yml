@@ -2,7 +2,7 @@ name: Continuous deployment
 on:
   workflow_run:
     branches: [master]
-    workflows: [Continuous integration]
+    workflows: []
     types: [completed]
 
 jobs:

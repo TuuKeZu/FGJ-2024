@@ -3,13 +3,6 @@
 version = 3
 
 [[package]]
-name = "FGJ-2024"
-version = "0.1.0"
-dependencies = [
- "bevy",
-]
-
-[[package]]
 name = "ab_glyph"
 version = "0.2.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1593,6 +1586,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4f9bfee30e4dedf0ab8b422f03af778d9612b63f502710fc500a334ebe2de645"
 dependencies = [
  "simd-adler32",
+]
+
+[[package]]
+name = "fgj_2024"
+version = "0.1.0"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]

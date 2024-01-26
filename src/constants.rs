@@ -1,12 +1,11 @@
 use bevy::render::color::Color;
 use bevy::{
-    asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
-    input::common_conditions::input_toggle_active, prelude::*,
+    prelude::*,
 };
-use bevy_egui::EguiPlugin;
+
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
-use bevy_inspector_egui::{DefaultInspectorConfigPlugin, InspectorOptions};
-use bevy_rapier2d::prelude::*;
+use bevy_inspector_egui::{InspectorOptions};
+
 
 #[derive(Resource, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]

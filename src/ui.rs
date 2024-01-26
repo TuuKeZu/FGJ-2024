@@ -57,7 +57,7 @@ pub fn entity_inspector(world: &mut World) {
     });
 }
 
-pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>, constants: Res<Constants>) {
+pub fn setup_ui(_commands: Commands, _asset_server: Res<AssetServer>, _constants: Res<Constants>) {
     // let font = asset_server.load("fonts/ComicMono.ttf");
     // commands.spawn(FpsBundle::new(font));
 }

@@ -1,6 +1,6 @@
-use bevy::{input::common_conditions::input_toggle_active, prelude::*, window::PrimaryWindow};
-use bevy_egui::{egui, EguiContext, EguiPlugin};
-use bevy_inspector_egui::{bevy_inspector, DefaultInspectorConfigPlugin};
+use bevy::{prelude::*, window::PrimaryWindow};
+use bevy_egui::{egui, EguiContext};
+use bevy_inspector_egui::{bevy_inspector};
 use bevy_rapier2d::prelude::*;
 
 pub fn show_ball_position(

@@ -1,6 +1,8 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, diagnostic::{Diagnostics, FrameTimeDiagnosticsPlugin, DiagnosticsStore}};
 
 use bevy_rapier2d::prelude::*;
+
+use crate::ui::{FpsBundle, FpsText};
 
 pub fn setup_graphics(mut commands: Commands) {
     // Add a camera so we can see the debug-render.

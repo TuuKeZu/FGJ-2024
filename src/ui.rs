@@ -98,13 +98,13 @@ impl FpsBundle {
                     TextStyle {
                         font: font.clone(),
                         font_size: constants.ui.font_size,
-                        color: constants.ui.font_color
+                        color: constants.ui.font_color,
                     },
                 ),
                 TextSection::from_style(TextStyle {
                     font,
                     font_size: constants.ui.font_size,
-                    color: constants.ui.font_color
+                    color: constants.ui.font_color,
                 }),
             ])
             .with_style(Style {

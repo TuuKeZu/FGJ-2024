@@ -7,9 +7,7 @@ use crate::constants::Constants;
 pub struct Car {}
 
 #[derive(Component)]
-pub struct CarState {
-
-}
+pub struct CarState {}
 
 #[derive(Bundle)]
 pub struct CarBundle {
@@ -21,18 +19,20 @@ pub struct CarBundle {
     collider: Collider,
     damping: Damping,
     gravity: GravityScale,
-    ef: ExternalForce
+    ef: ExternalForce,
 }
 
 impl CarBundle {
     pub fn new(constants: Res<Constants>) -> Self {
-
-        let car= CarBundle {
+        let car = CarBundle {
             car: Car {},
-            state: CarState { },
+            state: CarState {},
             sprite: SpriteBundle {
                 sprite: Sprite {
-                    custom_size: Some(Vec2::new(constants.physics.size.x,constants.physics.size.y)),
+                    custom_size: Some(Vec2::new(
+                        constants.physics.size.x,
+                        constants.physics.size.y,
+                    )),
                     color: Color::rgb(255., 255., 255.),
                     ..Default::default()
                 },
@@ -44,9 +44,12 @@ impl CarBundle {
                 linear_damping: constants.physics.linear_damping,
                 angular_damping: constants.physics.angular_damping,
             },
-            collider: Collider::cuboid(constants.physics.size.x,constants.physics.size.y),
+            collider: Collider::cuboid(constants.physics.size.x, constants.physics.size.y),
             gravity: GravityScale(0.),
-            ef: ExternalForce { force: Vec2::ZERO, torque: 0. }
+            ef: ExternalForce {
+                force: Vec2::ZERO,
+                torque: 0.,
+            },
         };
 
         car

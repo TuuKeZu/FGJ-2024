@@ -9,6 +9,7 @@
 
 ### Web-assembly
 1. Download trunk `cargo install --locked trunk` and wait for 490 depencies to compile
+2. Also download `cargo install --locked wasm-bindgen-cli`
 3. Compile to wasm: `cargo build --target wasm32-unknown-unknown --no-default-features`
 4. Setup localhost wasm-server: `trunk serve --no-default-features`
 

@@ -1,17 +1,18 @@
-use bevy::{
-    diagnostic::FrameTimeDiagnosticsPlugin, input::common_conditions::input_toggle_active,
-    prelude::*,
-};
+use bevy::{input::common_conditions::input_toggle_active, prelude::*, diagnostic::FrameTimeDiagnosticsPlugin, asset::AssetMetaCheck};
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::DefaultInspectorConfigPlugin;
 use bevy_rapier2d::prelude::*;
+use constants::Constants;
 
 mod constants;
 mod systems;
 mod ui;
+mod components;
 
 fn main() {
     App::new()
+        .insert_resource(AssetMetaCheck::Never)
+        .insert_resource(Constants::default())
         .add_plugins((DefaultPlugins, FrameTimeDiagnosticsPlugin))
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
         .add_plugins(RapierDebugRenderPlugin::default())

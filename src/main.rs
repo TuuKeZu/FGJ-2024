@@ -29,17 +29,28 @@ fn setup_graphics(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-fn setup_physics(mut commands: Commands) {
+fn setup_physics(mut commands: Commands, assets: Res<AssetServer>) {
     /* Create the ground. */
     commands
         .spawn(Collider::cuboid(500.0, 50.0))
-        .insert(TransformBundle::from(Transform::from_xyz(0.0, -100.0, 0.0)));
+        .insert(TransformBundle::from(
+            Transform::from_xyz(0.0, -100.0, 0.0).with_rotation(Quat::from_rotation_z(-0.1)),
+        ));
 
     /* Create the bouncing ball. */
+    let ball_radius = 50.;
     commands
         .spawn(RigidBody::Dynamic)
-        .insert(Collider::ball(50.0))
+        .insert(Collider::ball(ball_radius))
         .insert(Restitution::coefficient(0.7))
+        .insert(SpriteBundle {
+            texture: assets.load("ball.png"),
+            sprite: Sprite {
+                custom_size: Some(Vec2::new(2. * ball_radius, 2. * ball_radius)),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
         .insert(TransformBundle::from(Transform::from_xyz(0.0, 400.0, 0.0)));
 }
 

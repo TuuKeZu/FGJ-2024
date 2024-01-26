@@ -1,3 +1,5 @@
+use crate::systems::*;
+use crate::ui::*;
 use bevy::{
     asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
     input::common_conditions::input_toggle_active, prelude::*,
@@ -13,26 +15,27 @@ mod systems;
 mod ui;
 
 fn main() {
+    let plugins = (
+        DefaultPlugins,
+        FrameTimeDiagnosticsPlugin,
+        RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
+        RapierDebugRenderPlugin::default(),
+        EguiPlugin,
+        DefaultInspectorConfigPlugin,
+    );
+    let update = (
+        world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
+        entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
+        show_ball_position,
+        update_fps,
+    );
+    let startup = (setup_graphics, setup_physics, setup_ui);
+
     App::new()
         .insert_resource(AssetMetaCheck::Never)
         .insert_resource(Constants::default())
-        .add_plugins((DefaultPlugins, FrameTimeDiagnosticsPlugin))
-        .add_plugins(RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0))
-        .add_plugins(RapierDebugRenderPlugin::default())
-        .add_plugins(EguiPlugin)
-        .add_plugins(DefaultInspectorConfigPlugin)
-        .add_systems(
-            Update,
-            ui::world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
-        )
-        .add_systems(
-            Update,
-            ui::entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
-        )
-        .add_systems(Startup, systems::setup_graphics)
-        .add_systems(Startup, systems::setup_physics)
-        .add_systems(Startup, ui::setup_ui)
-        .add_systems(Update, ui::show_ball_position)
-        .add_systems(Update, ui::update_fps)
+        .add_plugins(plugins)
+        .add_systems(Update, update)
+        .add_systems(Startup, startup)
         .run();
 }

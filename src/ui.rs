@@ -1,8 +1,12 @@
-use bevy::{prelude::*, window::PrimaryWindow, diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin}};
+use crate::constants::*;
+use bevy::{
+    diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
+    prelude::*,
+    window::PrimaryWindow,
+};
 use bevy_egui::{egui, EguiContext};
 use bevy_inspector_egui::bevy_inspector;
 use bevy_rapier2d::prelude::*;
-use crate::constants::*;
 
 #[derive(Component)]
 pub struct FpsText {}
@@ -10,7 +14,7 @@ pub struct FpsText {}
 #[derive(Bundle)]
 pub struct FpsBundle {
     text_bundle: TextBundle,
-    text: FpsText
+    text: FpsText,
 }
 
 impl FpsBundle {
@@ -22,8 +26,8 @@ impl FpsBundle {
                     TextStyle {
                         font: font.clone(),
                         font_size: FONT_SIZE,
-                        color: FONT_COLOR
-                    }
+                        color: FONT_COLOR,
+                    },
                 ),
                 TextSection::from_style(TextStyle {
                     font,
@@ -37,7 +41,7 @@ impl FpsBundle {
                 top: Val::Px(FPS_TEXT_PADDING),
                 ..default()
             }),
-            text: FpsText { }
+            text: FpsText {},
         }
     }
 }
@@ -90,7 +94,6 @@ pub fn entity_inspector(world: &mut World) {
         })
     });
 }
-
 
 pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/ComicMono.ttf");

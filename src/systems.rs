@@ -1,4 +1,7 @@
-use bevy::{prelude::*, diagnostic::{Diagnostics, FrameTimeDiagnosticsPlugin, DiagnosticsStore}};
+use bevy::{
+    diagnostic::{Diagnostics, DiagnosticsStore, FrameTimeDiagnosticsPlugin},
+    prelude::*,
+};
 
 use bevy_rapier2d::prelude::*;
 

@@ -1,17 +1,14 @@
+use bevy::prelude::*;
 use bevy::render::color::Color;
-use bevy::{
-    prelude::*,
-};
 
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
-use bevy_inspector_egui::{InspectorOptions};
-
+use bevy_inspector_egui::InspectorOptions;
 
 #[derive(Resource, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct Constants {
     pub ui: UiConstants,
-    pub physics: PhysicsConstants
+    pub physics: PhysicsConstants,
 }
 
 #[derive(Resource, Reflect, InspectorOptions)]
@@ -36,7 +33,6 @@ impl Default for PhysicsConstants {
     }
 }
 
-
 #[derive(Resource, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct UiConstants {
@@ -46,4 +42,3 @@ pub struct UiConstants {
     pub fps_text_padding: f32,
     pub font_color: Color,
 }
-

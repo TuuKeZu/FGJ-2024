@@ -13,7 +13,6 @@ pub fn setup_physics(mut commands: Commands, constants: Res<Constants>) {
     commands.spawn(CarBundle::new(constants));
 }
 
-
 pub fn move_car(
     keyboard_input: Res<Input<KeyCode>>,
     constants: Res<Constants>,
@@ -57,4 +56,3 @@ pub fn move_car(
         car_ef.torque = 0.;
     }
 }
-

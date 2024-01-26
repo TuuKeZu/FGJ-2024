@@ -44,6 +44,24 @@
         # Additional environment variables can be set directly
         # MY_CUSTOM_VAR = "some value";
       };
+
+      # Use with `watch_tool nix run -L`
+      watch_tool = pkgs.writeShellScriptBin "watch_tool" ''
+sigint_handler()
+{
+  kill $PID
+  exit
+}
+
+trap sigint_handler SIGINT
+
+while true; do
+  $@ &
+  PID=$!
+  ${pkgs.inotify-tools}/bin/inotifywait -q -e modify -e create -e close_write -r src
+  kill $PID
+done
+      '';
     in {
       checks = {};
       packages.default = fgc_2024;
@@ -78,6 +96,7 @@
               packages = with pkgs; [
                 pre-commit
                 trunk
+                watch_tool
               ];
 
               scripts.cargo-watch.exec = ''

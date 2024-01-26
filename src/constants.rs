@@ -9,7 +9,9 @@ use bevy_rapier2d::prelude::*;
 
 #[derive(Resource)]
 pub struct Constants {
+    #[inspector(min = 10.0, max = 70.0)]
     pub font_size: f32,
+    #[inspector(min = 10.0, max = 70.0)]
     pub fps_text_padding: f32,
     pub font_color: Color,
 }

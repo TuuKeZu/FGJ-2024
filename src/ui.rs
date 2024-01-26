@@ -90,27 +90,27 @@ pub struct FpsBundle {
 }
 
 impl FpsBundle {
-    pub fn new(font: Handle<Font>) -> Self {
+    pub fn new(constants: Res<Constants>, font: Handle<Font>) -> Self {
         Self {
             text_bundle: TextBundle::from_sections([
                 TextSection::new(
                     "fps: ",
                     TextStyle {
                         font: font.clone(),
-                        font_size: FONT_SIZE,
-                        color: FONT_COLOR,
+                        font_size: constants.font_size,
+                        color: constants.font_color
                     },
                 ),
                 TextSection::from_style(TextStyle {
                     font,
-                    font_size: FONT_SIZE,
-                    color: FONT_COLOR,
+                    font_size: constants.font_size,
+                    color: constants.font_color
                 }),
             ])
             .with_style(Style {
                 position_type: PositionType::Absolute,
-                right: Val::Px(FPS_TEXT_PADDING),
-                top: Val::Px(FPS_TEXT_PADDING),
+                right: Val::Px(constants.fps_text_padding),
+                top: Val::Px(constants.fps_text_padding),
                 ..default()
             }),
             text: FpsText {},

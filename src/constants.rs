@@ -1,17 +1,14 @@
+use bevy::prelude::*;
 use bevy::render::color::Color;
-use bevy::{
-    prelude::*,
-};
 
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
-use bevy_inspector_egui::{InspectorOptions};
-
+use bevy_inspector_egui::InspectorOptions;
 
 #[derive(Resource, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct Constants {
     pub ui: UiConstants,
-    pub physics: PhysicsConstants
+    pub physics: PhysicsConstants,
 }
 
 #[derive(Resource, Reflect, InspectorOptions)]
@@ -21,6 +18,7 @@ pub struct PhysicsConstants {
     pub linear_damping: f32,
     pub angular_damping: f32,
     pub engine_force: f32,
+    pub turn_force: f32,
     pub steering_force: f32,
 }
 
@@ -31,11 +29,11 @@ impl Default for PhysicsConstants {
             linear_damping: 3.,
             angular_damping: 1.,
             engine_force: 250.,
+            turn_force: 150.,
             steering_force: 10.,
         }
     }
 }
-
 
 #[derive(Resource, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
@@ -46,4 +44,3 @@ pub struct UiConstants {
     pub fps_text_padding: f32,
     pub font_color: Color,
 }
-

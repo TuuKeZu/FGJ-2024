@@ -1,6 +1,6 @@
 use bevy::{input::common_conditions::input_toggle_active, prelude::*};
-use bevy_egui::{EguiPlugin};
-use bevy_inspector_egui::{DefaultInspectorConfigPlugin};
+use bevy_egui::EguiPlugin;
+use bevy_inspector_egui::DefaultInspectorConfigPlugin;
 use bevy_rapier2d::prelude::*;
 
 mod systems;

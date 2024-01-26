@@ -28,6 +28,7 @@ fn main() {
         world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
         entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
         show_ball_position,
+        move_car,
         show_fps
     );
     let startup = (setup_graphics, setup_physics, setup_ui);

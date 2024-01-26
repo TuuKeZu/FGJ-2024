@@ -2,32 +2,59 @@ use bevy::prelude::*;
 
 use bevy_rapier2d::prelude::*;
 
+use crate::{components::*, constants::Constants};
+
 pub fn setup_graphics(mut commands: Commands) {
     // Add a camera so we can see the debug-render.
     commands.spawn(Camera2dBundle::default());
 }
 
-pub fn setup_physics(mut commands: Commands, assets: Res<AssetServer>) {
-    /* Create the ground. */
-    commands
-        .spawn(Collider::cuboid(500.0, 50.0))
-        .insert(TransformBundle::from(
-            Transform::from_xyz(0.0, -100.0, 0.0).with_rotation(Quat::from_rotation_z(-0.1)),
-        ));
-
-    /* Create the bouncing ball. */
-    let ball_radius = 50.;
-    commands
-        .spawn(RigidBody::Dynamic)
-        .insert(Collider::ball(ball_radius))
-        .insert(Restitution::coefficient(0.7))
-        .insert(SpriteBundle {
-            texture: assets.load("ball.png"),
-            sprite: Sprite {
-                custom_size: Some(Vec2::new(2. * ball_radius, 2. * ball_radius)),
-                ..Default::default()
-            },
-            ..Default::default()
-        })
-        .insert(TransformBundle::from(Transform::from_xyz(0.0, 400.0, 0.0)));
+pub fn setup_physics(mut commands: Commands, constants: Res<Constants>) {
+    commands.spawn(CarBundle::new(constants));
 }
+
+
+pub fn move_car(
+    keyboard_input: Res<Input<KeyCode>>,
+    constants: Res<Constants>,
+    mut query: Query<(&mut ExternalForce, &Transform), With<Car>>,
+) {
+    let (mut car_ef, transform) = query.single_mut();
+    let mut moving_y = false;
+    let mut moving_angular = false;
+
+    // TODO calculate the force direction from the transform.rotation
+
+    if keyboard_input.pressed(KeyCode::Up) {
+        car_ef.force.y = constants.physics.engine_force;
+        moving_y = true;
+    }
+
+    if keyboard_input.pressed(KeyCode::Down) {
+        car_ef.force.y = -constants.physics.engine_force;
+        moving_y = true;
+    }
+
+    if !moving_y {
+        car_ef.force.y = 0.;
+    }
+
+    if keyboard_input.pressed(KeyCode::Left) {
+        car_ef.torque = -constants.physics.steering_force;
+        moving_angular = true;
+    }
+
+    if keyboard_input.pressed(KeyCode::Left) {
+        car_ef.torque = constants.physics.steering_force;
+        moving_angular = true;
+    }
+
+    if !moving_y {
+        car_ef.force.y = 0.;
+    }
+
+    if !moving_angular {
+        car_ef.torque = 0.;
+    }
+}
+

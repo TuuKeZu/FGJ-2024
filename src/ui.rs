@@ -97,20 +97,20 @@ impl FpsBundle {
                     "fps: ",
                     TextStyle {
                         font: font.clone(),
-                        font_size: constants.font_size,
-                        color: constants.font_color
+                        font_size: constants.ui.font_size,
+                        color: constants.ui.font_color
                     },
                 ),
                 TextSection::from_style(TextStyle {
                     font,
-                    font_size: constants.font_size,
-                    color: constants.font_color
+                    font_size: constants.ui.font_size,
+                    color: constants.ui.font_color
                 }),
             ])
             .with_style(Style {
                 position_type: PositionType::Absolute,
-                right: Val::Px(constants.fps_text_padding),
-                top: Val::Px(constants.fps_text_padding),
+                right: Val::Px(constants.ui.fps_text_padding),
+                top: Val::Px(constants.ui.fps_text_padding),
                 ..default()
             }),
             text: FpsText {},

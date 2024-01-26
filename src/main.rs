@@ -33,6 +33,9 @@ fn main() {
         .add_systems(Startup, systems::setup_physics)
         .add_systems(Startup, ui::setup_ui)
         .add_systems(Update, ui::show_ball_position)
-        .add_systems(Update, ui::update_fps)
+        .add_systems(
+            Update,
+            ui::show_fps.run_if(input_toggle_active(false, KeyCode::F3)),
+        )
         .run();
 }

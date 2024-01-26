@@ -2,6 +2,8 @@ name: Continuous deployment
 on:
   release:
     types: [created]
+    branches:
+    - main
 
 permissions: write-all
 

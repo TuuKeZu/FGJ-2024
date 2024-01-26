@@ -99,6 +99,18 @@ done
                 watch_tool
               ];
 
+              # FIXME
+              pre-commit.default_stages = ["manual"];
+              # current workaround:
+              # 1. remove .pre-commit-config.yaml but don't stage the deletion
+              # 2. run `pre-commit run --all-files --hook-stage manual` before every commit
+
+              pre-commit.hooks = {
+                # TODO cargo check
+                rustfmt.enable = true;
+                alejandra.enable = true;
+              };
+
               scripts.cargo-watch.exec = ''
                 RED='\033[0;31m'
                 GREEN='\033[0;32m'

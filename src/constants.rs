@@ -1,11 +1,11 @@
 use bevy::render::color::Color;
-use bevy::{input::common_conditions::input_toggle_active, prelude::*, diagnostic::FrameTimeDiagnosticsPlugin, asset::AssetMetaCheck};
+use bevy::{
+    asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
+    input::common_conditions::input_toggle_active, prelude::*,
+};
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::DefaultInspectorConfigPlugin;
 use bevy_rapier2d::prelude::*;
-
-
-
 
 #[derive(Resource)]
 pub struct Constants {
@@ -19,7 +19,7 @@ impl Default for Constants {
         Self {
             font_size: 20.0,
             fps_text_padding: 10.0,
-            font_color: Color::rgb(255., 255., 255.)
+            font_color: Color::rgb(255., 255., 255.),
         }
     }
 }

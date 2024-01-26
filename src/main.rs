@@ -1,13 +1,16 @@
-use bevy::{input::common_conditions::input_toggle_active, prelude::*, diagnostic::FrameTimeDiagnosticsPlugin, asset::AssetMetaCheck};
+use bevy::{
+    asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
+    input::common_conditions::input_toggle_active, prelude::*,
+};
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::DefaultInspectorConfigPlugin;
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
 
+mod components;
 mod constants;
 mod systems;
 mod ui;
-mod components;
 
 fn main() {
     App::new()

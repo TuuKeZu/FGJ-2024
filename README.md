@@ -48,3 +48,16 @@
 - tried to resolve that, now it failed to generate any artifacts
 - turns out GitHub pages disliked the trunk generated 'index.html' paths
 - found documentation for Trunk.toml and resolved that issue
+
+### Development
+
+#### `pre-commit`
+
+See the pre-commit [guide](https://pre-commit.com/#usage).
+
+``` sh
+pre-commit install
+```
+
+From now on, committing will first run the pre-commit hooks specified
+[`.pre-commit-config.yaml`](./.pre-commit-config.yaml).

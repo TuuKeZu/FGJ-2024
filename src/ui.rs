@@ -8,44 +8,6 @@ use bevy_egui::{egui, EguiContext};
 use bevy_inspector_egui::bevy_inspector;
 use bevy_rapier2d::prelude::*;
 
-#[derive(Component)]
-pub struct FpsText {}
-
-#[derive(Bundle)]
-pub struct FpsBundle {
-    text_bundle: TextBundle,
-    text: FpsText,
-}
-
-impl FpsBundle {
-    pub fn new(constants: Res<Constants>, font: Handle<Font>) -> Self {
-        Self {
-            text_bundle: TextBundle::from_sections([
-                TextSection::new(
-                    "fps: ",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: constants.font_size,
-                        color: constants.font_color,
-                    },
-                ),
-                TextSection::from_style(TextStyle {
-                    font,
-                    font_size: constants.font_size,
-                    color: constants.font_color,
-                }),
-            ])
-            .with_style(Style {
-                position_type: PositionType::Absolute,
-                right: Val::Px(constants.fps_text_padding),
-                top: Val::Px(constants.fps_text_padding),
-                ..default()
-            }),
-            text: FpsText {},
-        }
-    }
-}
-
 pub fn show_ball_position(
     mut egui_context: Query<&mut EguiContext, With<PrimaryWindow>>,
     positions: Query<&Transform, With<RigidBody>>,
@@ -96,11 +58,67 @@ pub fn entity_inspector(world: &mut World) {
 }
 
 pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>, constants: Res<Constants>) {
-    let font = asset_server.load("fonts/ComicMono.ttf");
-
-    commands.spawn(FpsBundle::new(constants, font));
+    // let font = asset_server.load("fonts/ComicMono.ttf");
+    // commands.spawn(FpsBundle::new(font));
 }
 
+pub fn show_fps(
+    mut egui_context: Query<&mut EguiContext, With<PrimaryWindow>>,
+    diagnostics: Res<DiagnosticsStore>,
+) {
+    let mut egui_context = egui_context.single_mut();
+    egui::Window::new("FPS").show(egui_context.get_mut(), |ui| {
+        if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
+            if let Some(value) = fps.smoothed() {
+                egui::Grid::new("position").show(ui, |ui| {
+                    ui.label("FPS: ");
+                    ui.label(format!("{value:.2}"));
+                });
+            }
+        }
+    });
+}
+
+// Legacy FPS counter: do not use this; left for reference on how to use TextBundles
+#[derive(Component)]
+pub struct FpsText {}
+
+#[derive(Bundle)]
+pub struct FpsBundle {
+    text_bundle: TextBundle,
+    text: FpsText,
+}
+
+impl FpsBundle {
+    pub fn new(font: Handle<Font>) -> Self {
+        Self {
+            text_bundle: TextBundle::from_sections([
+                TextSection::new(
+                    "fps: ",
+                    TextStyle {
+                        font: font.clone(),
+                        font_size: FONT_SIZE,
+                        color: FONT_COLOR,
+                    },
+                ),
+                TextSection::from_style(TextStyle {
+                    font,
+                    font_size: FONT_SIZE,
+                    color: FONT_COLOR,
+                }),
+            ])
+            .with_style(Style {
+                position_type: PositionType::Absolute,
+                right: Val::Px(FPS_TEXT_PADDING),
+                top: Val::Px(FPS_TEXT_PADDING),
+                ..default()
+            }),
+            text: FpsText {},
+        }
+    }
+}
+
+#[allow(unused)]
 pub fn update_fps(diagnostics: Res<DiagnosticsStore>, mut fps_q: Query<&mut Text, With<FpsText>>) {
     for mut text in &mut fps_q {
         if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {

@@ -3,4 +3,5 @@
 
 # Nix
 .direnv/
+.devenv/
 result

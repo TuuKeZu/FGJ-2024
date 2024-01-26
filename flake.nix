@@ -54,8 +54,10 @@
         checks = self.checks.${system};
 
         # Extra inputs can be added here; cargo and rustc are provided by default.
-        packages = [
-          # pkgs.ripgrep
+        packages = with pkgs; [
+          pre-commit
+          trunk
+          cargo-watch
         ];
 
         # gona

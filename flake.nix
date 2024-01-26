@@ -10,15 +10,18 @@
     };
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    devenv.url = "github:cachix/devenv";
   };
 
   outputs = {
     self,
     nixpkgs,
     crane,
+    devenv,
     flake-utils,
     ...
-  }:
+  } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
 
@@ -49,19 +52,8 @@
         drv = fgc_2024;
       };
 
-      devShells.default = craneLib.devShell {
-        # Inherit inputs from checks.
-        checks = self.checks.${system};
-
-        # Extra inputs can be added here; cargo and rustc are provided by default.
-        packages = with pkgs; [
-          pre-commit
-          trunk
-          cargo-watch
-        ];
-
-        # gona
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (with pkgs; [
+      devShells.default = let
+        deps = with pkgs; [
           vulkan-loader
           xorg.libXcursor
           xorg.libXi
@@ -70,7 +62,51 @@
           udev
           libxkbcommon
           wayland
-        ]);
-      };
+        ];
+      in
+        devenv.lib.mkShell {
+          # Inherit inputs from checks.
+          inherit inputs pkgs;
+
+          # Extra inputs can be added here; cargo and rustc are provided by default.
+          modules = [
+            ({
+              pkgs,
+              config,
+              ...
+            }: {
+              packages = with pkgs; [
+                pre-commit
+                trunk
+              ];
+
+              scripts.cargo-watch.exec = ''
+                RED='\033[0;31m'
+                GREEN='\033[0;32m'
+                BLUE='\033[0;34m'
+                NC='\033[0m'
+
+                build () {
+                  if nix build .# -L; then
+                    echo -e "''${GREEN}Build successful''${NC}";
+                  else
+                    echo -e "''${RED}Build failed''${NC}";
+                  fi
+                }
+
+                build
+                echo -e "''${BLUE}Watching for changes''${NC}"
+
+                ${pkgs.inotify-tools}/bin/inotifywait -q -e close_write,moved_to,create -r -m ./src |
+                while read -r directory events filename; do
+                  build
+                done
+              '';
+
+              # gona
+              env.LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath deps}";
+            })
+          ];
+        };
     });
 }

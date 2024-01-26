@@ -5,7 +5,7 @@ use bevy::{
     input::common_conditions::input_toggle_active, prelude::*,
 };
 use bevy_egui::EguiPlugin;
-use bevy_inspector_egui::DefaultInspectorConfigPlugin;
+use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
 
@@ -22,6 +22,7 @@ fn main() {
         RapierDebugRenderPlugin::default(),
         EguiPlugin,
         DefaultInspectorConfigPlugin,
+        ResourceInspectorPlugin::<Constants>::default(),
     );
     let update = (
         world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
@@ -33,7 +34,8 @@ fn main() {
 
     App::new()
         .insert_resource(AssetMetaCheck::Never)
-        .insert_resource(Constants::default())
+        .init_resource::<Constants>()
+        .register_type::<Constants>()
         .add_plugins(plugins)
         .add_systems(Update, update)
         .add_systems(Startup, startup)

@@ -32,7 +32,6 @@ pub struct TriggerBundle {
     collider: Collider,
     sensor: Sensor,
     active_events: ActiveEvents,
-    gravity: GravityScale,
 }
 
 impl TriggerBundle {
@@ -59,7 +58,6 @@ impl TriggerBundle {
             collider: Collider::cuboid(constants.trigger.size.x, constants.trigger.size.y),
             sensor: Sensor {},
             active_events: ActiveEvents::COLLISION_EVENTS,
-            gravity: GravityScale(0.),
         }
     }
 }

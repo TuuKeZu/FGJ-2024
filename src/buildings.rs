@@ -60,7 +60,6 @@ impl BuildingBundle {
         commands
             .spawn(building)
             .insert(RigidBody::Fixed)
-            .insert(GravityScale(0.))
             .insert(Collider::cuboid(
                 constants.building.size.x,
                 constants.building.size.y,

@@ -82,6 +82,10 @@ fn main() {
         .add_state::<AppState>()
         .insert_resource(AssetMetaCheck::Never)
         .insert_resource(MissionState::default())
+        .insert_resource(RapierConfiguration {
+            gravity: Vec2::new(0., 0.),
+            ..Default::default()
+        })
         .init_resource::<Constants>()
         .register_type::<Constants>()
         .register_type::<ParallaxHeight>()

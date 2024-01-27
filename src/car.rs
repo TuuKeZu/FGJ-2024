@@ -57,7 +57,6 @@ impl CarBundle {
         let car = commands
             .spawn(car)
             .insert(RigidBody::Dynamic)
-            .insert(GravityScale(0.))
             .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
             .insert(ColliderMassProperties::Mass(0.1))
             .insert(ReadMassProperties::default())
@@ -79,7 +78,6 @@ impl CarBundle {
             parent
                 .spawn(TireBundle::default())
                 .insert(RigidBody::Dynamic)
-                .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
@@ -92,7 +90,6 @@ impl CarBundle {
             parent
                 .spawn(TireBundle::default())
                 .insert(RigidBody::Dynamic)
-                .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
@@ -109,7 +106,6 @@ impl CarBundle {
                 .spawn(TireBundle::default())
                 .insert(Steering)
                 .insert(RigidBody::Dynamic)
-                .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
@@ -122,7 +118,6 @@ impl CarBundle {
                 .spawn(TireBundle::default())
                 .insert(Steering)
                 .insert(RigidBody::Dynamic)
-                .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))

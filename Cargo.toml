@@ -24,7 +24,7 @@ fast-compile = ["bevy/dynamic_linking"]
 
 [dependencies]
 bevy = "0.12.1"
-bevy-inspector-egui = "0.22.1"
+bevy-inspector-egui = { version = "0.22.1", default-features = false }
 bevy_egui = { version = "0.24.0", features = ["serde"] }
 bevy_rapier2d = "0.23.0"
 serde_json = "1.0.112"

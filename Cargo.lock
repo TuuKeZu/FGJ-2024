@@ -386,7 +386,6 @@ dependencies = [
  "bevy_hierarchy",
  "bevy_log",
  "bevy_math",
- "bevy_pbr",
  "bevy_reflect",
  "bevy_render",
  "bevy_time",

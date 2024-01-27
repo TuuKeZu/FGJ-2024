@@ -36,7 +36,7 @@ pub struct TriggerBundle {
 }
 
 impl TriggerBundle {
-    pub fn new(constants: &Res<Constants>) -> Self {
+    pub fn new(trigger_type: TriggerType, constants: &Res<Constants>) -> Self {
         Self {
             trigger: Trigger {},
             trigger_type: TriggerType::StartMission,
@@ -65,6 +65,7 @@ impl TriggerBundle {
 }
 
 pub fn setup_trigger(mut commands: Commands, constants: Res<Constants>) {
+    /*
     commands.spawn(TriggerBundle::new(&constants));
     commands
         .spawn(TriggerBundle::new(&constants))
@@ -73,6 +74,7 @@ pub fn setup_trigger(mut commands: Commands, constants: Res<Constants>) {
             translation: Vec3::new(200., 200., 0.),
             ..Default::default()
         });
+    */
 }
 
 pub fn handle_trigger_collisions(

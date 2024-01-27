@@ -16,6 +16,8 @@ use car::update_tire_forces;
 use car::{car_control, tire_friction};
 use constants::Constants;
 use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState};
+use missions::MissionState;
+use missions::setup_missions;
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod appstate;
@@ -23,6 +25,7 @@ mod buildings;
 mod car;
 mod constants;
 mod dialogues;
+mod missions;
 mod parallax;
 mod road;
 mod systems;
@@ -73,12 +76,14 @@ fn main() {
         setup_physics,
         setup_buildings,
         setup_dialogues,
+        setup_missions,
         setup_ui.after(setup_dialogues),
     );
 
     App::new()
         .add_state::<AppState>()
         .insert_resource(AssetMetaCheck::Never)
+        .insert_resource(MissionState::default())
         .init_resource::<Constants>()
         .register_type::<Constants>()
         .register_type::<ParallaxHeight>()

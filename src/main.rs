@@ -41,6 +41,7 @@ fn main() {
         DefaultInspectorConfigPlugin,
         ResourceInspectorPlugin::<Constants>::default(),
         JsonAssetPlugin::<Dialogue>::new(&["dialogue.json"]),
+        ParallaxPlugin,
     );
     let update = (
         world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
@@ -57,6 +58,7 @@ fn main() {
         .insert_resource(AssetMetaCheck::Never)
         .init_resource::<Constants>()
         .register_type::<Constants>()
+        .register_type::<ParallaxHeight>()
         .insert_resource(DialogueState::default())
         .add_plugins(plugins)
         .add_systems(Update, update)

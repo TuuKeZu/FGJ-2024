@@ -1,3 +1,4 @@
+use crate::car::move_car;
 use crate::systems::*;
 use crate::tilemap::setup_tilemap;
 use crate::ui::*;

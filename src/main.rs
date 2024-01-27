@@ -1,3 +1,4 @@
+use crate::appstate::*;
 use crate::car::move_car;
 use crate::systems::*;
 use crate::tilemap::setup_tilemap;
@@ -11,9 +12,10 @@ use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
-use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueState, DialogueList};
+use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState};
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
+mod appstate;
 mod car;
 mod constants;
 mod dialogues;
@@ -23,12 +25,6 @@ mod tilemap;
 mod ui;
 
 use dialogues::Dialogue;
-
-#[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
-enum AppState {
-    #[default]
-    Loading,
-}
 
 fn main() {
     let plugins = (
@@ -44,6 +40,7 @@ fn main() {
                 }),
                 ..Default::default()
             }),
+        AppState::splash_screen(),
         FrameTimeDiagnosticsPlugin,
         RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
         RapierDebugRenderPlugin::default(),

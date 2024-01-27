@@ -1,10 +1,9 @@
 use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
-use std::{fs, time::Duration, collections::VecDeque};
+use std::{collections::VecDeque, fs, time::Duration};
 
-use bevy::prelude::*;
 use crate::constants::Constants;
-
+use bevy::prelude::*;
 
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 #[serde(transparent)]
@@ -22,7 +21,7 @@ impl DialogueList {
 pub struct Dialogue {
     pub name: String,
     pub list: VecDeque<DialogueSection>,
-    current: Option<DialogueSection>
+    current: Option<DialogueSection>,
 }
 
 impl Dialogue {
@@ -36,7 +35,7 @@ impl Dialogue {
                 }
 
                 return Some(DialogueContent::new(section.character, text.unwrap()));
-            },
+            }
             None => {
                 self.current = self.list.pop_front();
 
@@ -47,30 +46,23 @@ impl Dialogue {
                 return self.next_dialogue();
             }
         }
-
     }
 }
 
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub struct DialogueContent {
     character: DialogueCharacter,
-    text: String
+    text: String,
 }
 
 impl DialogueContent {
     fn new(character: DialogueCharacter, text: String) -> Self {
-        Self {
-            text,
-            character
-        }
+        Self { text, character }
     }
 }
 
-
 #[derive(Resource)]
 pub struct DialogueHandle(Handle<DialogueList>);
-
-
 
 #[derive(Debug, Clone, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub struct DialogueSection {
@@ -161,7 +153,6 @@ pub fn handle_dialogue_ui(
     dialogue: Res<DialogueHandle>,
 ) {
     if state.active {
-
         // TODO dynamic timer
         state.timer.tick(time.delta());
 

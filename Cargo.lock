@@ -998,6 +998,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_splash_screen"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c6873520c22fa721f301b02905b8311d4c68c4b3dd6545b8e3bcab6c01eff55c"
+dependencies = [
+ "bevy",
+ "bevy_tweening",
+]
+
+[[package]]
 name = "bevy_sprite"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1085,6 +1095,15 @@ dependencies = [
  "bevy_math",
  "bevy_reflect",
  "thiserror",
+]
+
+[[package]]
+name = "bevy_tweening"
+version = "0.9.0"
+source = "git+https://github.com/SergioRibera/bevy_tweening?branch=infinite_mirrored#45eee6082f3c96a6c31c8fa3b4d6c2ffdd212e7f"
+dependencies = [
+ "bevy",
+ "interpolation",
 ]
 
 [[package]]
@@ -1843,6 +1862,8 @@ dependencies = [
  "bevy_common_assets",
  "bevy_egui",
  "bevy_rapier2d",
+ "bevy_splash_screen",
+ "bevy_tweening",
  "serde",
  "serde_json",
 ]
@@ -2304,6 +2325,12 @@ dependencies = [
  "wasm-bindgen",
  "web-sys",
 ]
+
+[[package]]
+name = "interpolation"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3b7357d2bbc5ee92f8e899ab645233e43d21407573cceb37fed8bc3dede2c02"
 
 [[package]]
 name = "io-kit-sys"

@@ -30,3 +30,8 @@ bevy_rapier2d = "0.23.0"
 serde_json = "1.0.112"
 serde = "1.0.196"
 bevy_common_assets = { version = "0.9.0", features = ["json"] }
+bevy_splash_screen = "0.5.0"
+bevy_tweening = "0.9.0"
+
+[patch.crates-io]
+bevy_tweening = { git = "https://github.com/SergioRibera/bevy_tweening", branch = "infinite_mirrored" }

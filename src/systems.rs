@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     car::*,
     constants::Constants,
-    dialogues::{Dialogue, DialogueHandle, DialogueState, DialogueList},
+    dialogues::{Dialogue, DialogueHandle, DialogueList, DialogueState},
 };
 
 pub fn setup_graphics(mut commands: Commands) {

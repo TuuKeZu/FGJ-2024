@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::road::{Road, RoadBundle, RoadTexture};
 
-pub const TILE_SIZE: f32 = 120.;
+pub const TILE_SIZE: f32 = 400.;
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum TileType {

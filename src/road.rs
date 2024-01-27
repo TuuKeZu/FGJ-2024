@@ -49,7 +49,7 @@ impl RoadTexture {
             Vec2::new(64.0, 64.0),
             1,
             1,
-        );
+        )
     }
 }
 
@@ -70,13 +70,13 @@ impl RoadBundle {
         Self {
             sprite: ParallaxSprite {
                 transform: transform.into(),
-                sprite: Sprite {
-                    custom_size: Some(Vec2::new(TILE_SIZE, TILE_SIZE)),
-                    rect: Some(Rect::new(32., 32., 224., 224.)),
-                    ..Default::default()
-                },
+                visibility: Default::default(),
+                // sprite: Sprite {
+                //     custom_size: Some(Vec2::new(TILE_SIZE, TILE_SIZE)),
+                //     rect: Some(Rect::new(32., 32., 224., 224.)),
+                //     ..Default::default()
+                // },
                 images,
-                ..Default::default()
             },
             piece,
         }

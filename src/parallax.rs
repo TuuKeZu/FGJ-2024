@@ -79,11 +79,14 @@ pub fn add_layers(
     ) in added_entities_without_layers.iter()
     {
         commands.entity(entity).with_children(|parent| {
-            let tah = asset_server.get_handle(path).unwrap_or_else(|| {
-                let handle = asset_server.load(path);
-                let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
-                texture_atlases.add(ta)
-            });
+            let handle = asset_server.load(path);
+            let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
+            let tah = texture_atlases.add(ta);
+            // let tah = asset_server.get_handle(path).unwrap_or_else(|| {
+            //     let handle = asset_server.load(path);
+            //     let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
+            //     texture_atlases.add(ta)
+            // });
 
             for (index, height, sprite) in indices_heights_sprites {
                 let sprite = TextureAtlasSprite {

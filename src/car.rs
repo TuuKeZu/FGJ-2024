@@ -99,7 +99,7 @@ impl CarBundle {
                 .limits([-0.5, 0.5])
                 .motor_model(MotorModel::ForceBased)
                 .motor(0., 0., 1., 0.3);
-            let mut joint = joint_builder.local_anchor1(Vec2::new(-62., 80.)).build();
+            let mut joint = joint_builder.local_anchor1(Vec2::new(-42., 80.)).build();
             joint.set_contacts_enabled(false);
 
             parent
@@ -108,10 +108,9 @@ impl CarBundle {
                 .insert(RigidBody::Dynamic)
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
-                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
-                .insert(Velocity::zero());
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
 
-            let mut joint = joint_builder.local_anchor1(Vec2::new(62., 80.)).build();
+            let mut joint = joint_builder.local_anchor1(Vec2::new(42., 80.)).build();
             joint.set_contacts_enabled(false);
 
             parent
@@ -120,8 +119,7 @@ impl CarBundle {
                 .insert(RigidBody::Dynamic)
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
-                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
-                .insert(Velocity::zero());
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
         });
     }
 }
@@ -130,7 +128,6 @@ impl CarBundle {
 pub struct TireBundle {
     tire: Tire,
     force: ExternalForce,
-    impulse: ExternalImpulse,
     transform: TransformBundle,
     velocity: Velocity,
     rmp: ReadMassProperties,

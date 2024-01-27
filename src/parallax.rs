@@ -82,6 +82,7 @@ pub fn add_layers(
             let handle = asset_server.load(path);
             let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
             let tah = texture_atlases.add(ta);
+            // TODO
             // let tah = asset_server.get_handle(path).unwrap_or_else(|| {
             //     let handle = asset_server.load(path);
             //     let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);

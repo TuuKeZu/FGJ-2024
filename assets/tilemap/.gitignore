@@ -1,0 +1,5 @@
+*
+!.gitignore
+!simplified
+!simplified/Level_0
+!simplified/Level_0/Map.csv

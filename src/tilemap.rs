@@ -3,12 +3,13 @@ use bevy::prelude::*;
 #[derive(Debug, Clone, Copy)]
 pub enum TileType {
     Grass,
+    Pavement,
     Building,
 }
 
 #[derive(Component)]
 pub struct Tile {
-    // tp: TileType,
+    //tp: TileType,
 }
 
 #[derive(Bundle)]
@@ -17,13 +18,14 @@ pub struct TileBundle {
     sprite: SpriteBundle,
 }
 
-const TILE_SIZE: f32 = 32.;
+const TILE_SIZE: f32 = 64.;
 
 impl TileBundle {
     pub fn new(tp: TileType, pos: Vec3) -> TileBundle {
         let color = match tp {
             TileType::Grass => Color::rgb(0., 1., 0.),
-            TileType::Building => Color::rgb(0.5, 0.5, 0.5),
+            TileType::Pavement => Color::rgb(0., 0., 0.),
+            TileType::Building => Color::rgb(0.8, 0.5, 0.5),
         };
         TileBundle {
             tile: Tile {},
@@ -44,14 +46,35 @@ impl TileBundle {
 }
 
 pub fn setup_tilemap(mut commands: Commands) {
-    for x in -10..=10 {
-        for y in -10..=10 {
-            let tp = if (x + y) % 2 == 0 {
-                TileType::Grass
-            } else {
-                TileType::Building
+    let map = load_map();
+    for (i, row) in map.iter().enumerate() {
+        for (j, val) in row.iter().enumerate() {
+            let x = j as f32;
+            let y = -(i as f32);
+            let tp = match val {
+                0 => continue,
+                1 => TileType::Grass,
+                2 => TileType::Pavement,
+                3 => TileType::Building,
+                _ => panic!("unsupported tile type"),
             };
-            commands.spawn(TileBundle::new(tp, Vec3::new(x as f32, y as f32, -1.)));
+            commands.spawn(TileBundle::new(tp, Vec3::new(x, y, -1.)));
         }
     }
+}
+
+const MAP_CSV_CONTENT: &str = include_str!(concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/assets/tilemap/simplified/Level_0/Map.csv"
+));
+
+fn load_map() -> Vec<Vec<i32>> {
+    MAP_CSV_CONTENT
+        .lines()
+        .map(|l| {
+            l.split(',')
+                .filter_map(|val| val.parse().ok())
+                .collect::<Vec<i32>>()
+        })
+        .collect()
 }

@@ -1,5 +1,4 @@
 use crate::appstate::*;
-use crate::car::move_car;
 use crate::systems::*;
 use crate::tilemap::setup_tilemap;
 use crate::ui::*;
@@ -11,6 +10,7 @@ use bevy_common_assets::json::JsonAssetPlugin;
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
+use car::{car_control, tire_friction};
 use constants::Constants;
 use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState};
 use parallax::{ParallaxHeight, ParallaxPlugin};
@@ -55,11 +55,12 @@ fn main() {
     let update = (
         world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
         entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
-        move_car,
         show_fps,
         camera_follow,
         handle_dialogue_ui,
         handle_trigger_collisions,
+        tire_friction,
+        car_control,
     );
     let startup = (
         setup_graphics,

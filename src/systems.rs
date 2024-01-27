@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     car::*,
     constants::Constants,
-    dialogues::{Dialogue, DialogueHandle, DialogueList, DialogueState},
+    dialogues::{DialogueHandle, DialogueList, DialogueState},
 };
 
 pub fn setup_graphics(mut commands: Commands) {
@@ -11,7 +11,7 @@ pub fn setup_graphics(mut commands: Commands) {
 }
 
 pub fn setup_physics(mut commands: Commands, constants: Res<Constants>) {
-    commands.spawn(CarBundle::new(constants));
+    CarBundle::spawn(&mut commands, constants);
 }
 
 pub fn camera_follow(

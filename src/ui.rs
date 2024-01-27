@@ -1,9 +1,5 @@
 use crate::constants::*;
-use crate::{
-    constants::*,
-    dialogues::{Dialogue, DialogueBundle, DialogueHandle, DialogueState},
-    tilemap::Tile,
-};
+use crate::{dialogues::DialogueBundle, tilemap::Tile};
 use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,

@@ -1,9 +1,8 @@
-use bevy::{prelude::*, reflect::TypeUuid};
-use serde::Deserialize;
-use std::{collections::VecDeque, fs, time::Duration};
+use bevy::prelude::*;
+
+use std::{collections::VecDeque, time::Duration};
 
 use crate::constants::Constants;
-use bevy::prelude::*;
 
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 #[serde(transparent)]
@@ -149,8 +148,8 @@ pub fn handle_dialogue_ui(
     mut ui_q: Query<&mut Text, With<DialogueText>>,
     mut state: ResMut<DialogueState>,
     time: Res<Time>,
-    dialogues: ResMut<Assets<DialogueList>>,
-    dialogue: Res<DialogueHandle>,
+    _dialogues: ResMut<Assets<DialogueList>>,
+    _dialogue: Res<DialogueHandle>,
 ) {
     if state.active {
         // TODO dynamic timer

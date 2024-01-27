@@ -20,6 +20,7 @@ mod car;
 mod constants;
 mod dialogues;
 mod parallax;
+mod road;
 mod systems;
 mod tilemap;
 mod trigger;

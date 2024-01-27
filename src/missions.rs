@@ -32,10 +32,12 @@ impl MissionState {
             TriggerType::StartMission
         };
 
-        commands.spawn(TriggerBundle::new(trigger_type, &constants)).insert(Transform {
-            translation: self.current_target.unwrap().extend(0.),
-            ..Default::default()
-        });
+        commands
+            .spawn(TriggerBundle::new(trigger_type, &constants))
+            .insert(Transform {
+                translation: self.current_target.unwrap().extend(0.),
+                ..Default::default()
+            });
     }
 
     pub fn next_target(&mut self) {}

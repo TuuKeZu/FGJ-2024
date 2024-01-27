@@ -6,7 +6,7 @@ use bevy::prelude::*;
 
 use crate::{
     parallax::{ParallaxImages, ParallaxSprite},
-    tilemap::TILE_SIZE,
+    // constants::TILE_SIZE,
 };
 
 #[derive(Debug, Clone, Copy)]

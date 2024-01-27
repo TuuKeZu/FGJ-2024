@@ -4,6 +4,8 @@ use bevy::render::color::Color;
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
 use bevy_inspector_egui::InspectorOptions;
 
+pub const TILE_SIZE: f32 = 400.;
+
 #[derive(Resource, Clone, Copy, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct Constants {

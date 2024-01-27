@@ -16,8 +16,8 @@ use car::update_tire_forces;
 use car::{car_control, tire_friction};
 use constants::Constants;
 use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState};
-use missions::MissionState;
 use missions::setup_missions;
+use missions::MissionState;
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod appstate;

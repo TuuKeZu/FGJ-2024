@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
 use crate::{
-    components::*,
+    car::*,
     constants::Constants,
     dialogues::{Dialogue, DialogueHandle, DialogueState},
 };

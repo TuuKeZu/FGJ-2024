@@ -13,7 +13,7 @@ use constants::Constants;
 use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueState};
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
-mod components;
+mod car;
 mod constants;
 mod dialogues;
 mod parallax;

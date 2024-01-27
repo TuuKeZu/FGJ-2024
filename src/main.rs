@@ -32,6 +32,7 @@ fn main() {
         show_ball_position,
         move_car,
         show_fps,
+        camera_follow
     );
     let startup = (setup_graphics, setup_tilemap, setup_physics, setup_ui);
 

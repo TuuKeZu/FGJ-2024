@@ -62,3 +62,12 @@ pub fn move_car(
         car_ef.torque = 0.;
     }
 }
+
+pub fn camera_follow(car_q: Query<&Transform, With<Car>>, mut camera_q: Query<&mut Transform, (With<Camera2d>, Without<Car>)>) {
+    let car_transform = car_q.get_single().unwrap();
+    let mut camera_transform = camera_q.get_single_mut().unwrap();
+
+    // TODO add easing
+    camera_transform.translation.x = car_transform.translation.x;
+    camera_transform.translation.y = car_transform.translation.y;
+}

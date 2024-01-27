@@ -62,7 +62,10 @@ pub fn move_car(
     }
 }
 
-pub fn camera_follow(car_q: Query<&Transform, With<Car>>, mut camera_q: Query<&mut Transform, (With<Camera2d>, Without<Car>)>) {
+pub fn camera_follow(
+    car_q: Query<&Transform, With<Car>>,
+    mut camera_q: Query<&mut Transform, (With<Camera2d>, Without<Car>)>,
+) {
     let car_transform = car_q.get_single().unwrap();
     let mut camera_transform = camera_q.get_single_mut().unwrap();
 

@@ -6,7 +6,6 @@ use bevy::{
 };
 use bevy_egui::{egui, EguiContext};
 use bevy_inspector_egui::bevy_inspector;
-use bevy_rapier2d::prelude::*;
 
 // Inspectors for debugging
 pub fn world_inspector(world: &mut World) {

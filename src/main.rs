@@ -86,10 +86,7 @@ fn main() {
         .add_plugins(plugins)
         .add_systems(Update, update)
         .add_systems(Startup, startup)
-        .add_systems(
-            FixedUpdate,
-            tire_friction.run_if(input_toggle_active(false, KeyCode::F5)),
-        )
+        .add_systems(FixedUpdate, tire_friction)
         .add_systems(FixedUpdate, update_car_velocity.after(tire_friction))
         .add_systems(FixedUpdate, update_tire_forces.after(tire_friction))
         .add_systems(

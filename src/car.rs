@@ -92,8 +92,7 @@ impl CarBundle {
 
         let car = commands
             .spawn(car)
-            // TODO .insert(RigidBody::Dynamic)
-            .insert(RigidBody::Fixed)
+            .insert(RigidBody::Dynamic)
             .insert(GravityScale(0.))
             .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
             .insert(ColliderMassProperties::Mass(0.1))
@@ -138,7 +137,6 @@ impl CarBundle {
 
             // Spawn front tires
             let joint_builder = RevoluteJointBuilder::new()
-                .local_anchor2(Vec2::new(0., 10.))
                 .limits([-0.5, 0.5])
                 .motor_model(MotorModel::ForceBased)
                 .motor(0., 0., 1., 0.3);
@@ -249,6 +247,7 @@ pub fn car_control(
             &mut Tire,
             &mut ExternalForce,
             &mut Transform,
+            &mut ImpulseJoint,
             &GlobalTransform,
         ),
         (With<Steering>),
@@ -269,7 +268,7 @@ pub fn car_control(
         steering += -0.4;
     }
 
-    for (mut tire, mut force, mut transform, global_transform) in tires.iter_mut() {
+    for (mut tire, mut force, mut transform, mut joint, global_transform) in tires.iter_mut() {
         let (_scale, rotation, _translation) = global_transform.to_scale_rotation_translation();
 
         // force.force = rotation
@@ -278,6 +277,8 @@ pub fn car_control(
         tire.force.y += acceleration_force;
 
         transform.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), steering);
+        // joint.data.raw.motors[JointAxis::AngX].target_pos = steering;
+        joint.data.set_motor(JointAxis::AngX, steering, 0., 10., 1.);
     }
 }
 
@@ -307,18 +308,24 @@ pub fn reset_tires(mut tires: Query<&mut Tire>) {
 }
 
 pub fn update_tire_forces(
-    mut cars: Query<(&mut Velocity, &Children), Without<Tire>>,
+    mut cars: Query<(&mut ExternalForce), Without<Tire>>,
     mut tires: Query<(&mut Tire, &GlobalTransform, &Parent, &mut ExternalForce)>,
 ) {
+    for mut car in cars.iter_mut() {
+        car.force = Vec2::new(0., 0.);
+    }
+
     for (mut tire, transform, parent, mut force) in tires.iter_mut() {
-        let (_scale, rotation, _translation) = transform.to_scale_rotation_translation();
+        let (_scale, rotation, translation) = transform.to_scale_rotation_translation();
 
         // println!("Applying force: {:?}", tire.force);
         let f = rotation
             .mul_vec3(Vec3::new(tire.force.x, tire.force.y, 0.))
             .xy();
 
-        if let Ok(car) = cars.get(parent.get()) {}
+        // if let Ok(mut car) = cars.get_mut(parent.get()) {
+        //     *car += ExternalForce::at_point(f, translation.xy(), Vec2::new(0., 0.));
+        // }
 
         force.force = f;
         tire.force = Vec2::new(0., 0.);

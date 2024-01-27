@@ -90,7 +90,28 @@
             {
                 "character": "Driver",
                 "list": [
-                    "Yea sure!"
+                    "Yea sure!",
+                    "Wrumm"
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Why did you leave so late?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Well I thought I had time so I took a shit.",
+                    "But I was so tired I fell asleep on the toilet and slept for like an hour!",
+                    "But all is well if you just take me to the airport in time"
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Sure thing!"
                 ]
             }
         ]

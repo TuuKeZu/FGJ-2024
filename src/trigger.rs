@@ -83,7 +83,7 @@ pub fn handle_trigger_collisions(
 ) {
     let mut car_state = car_q.get_single_mut().unwrap();
 
-    for event in collision_events.iter() {
+    for event in collision_events.read() {
         match event {
             CollisionEvent::Started(sensor, car, flags) => {
                 if flags != &CollisionEventFlags::SENSOR {

@@ -20,20 +20,36 @@ pub enum RoadTexture {
 impl RoadTexture {
     fn get_parallax_images(&self) -> ParallaxImages {
         use RoadTexture::*;
-        let (name, layers) = match self {
-            Pavement => ("pavement", 1),
-            PavementTurn => ("pavement_turn", 1),
-            PavementT => ("pavement_t", 1),
-            PavementCross => ("pavement_cross", 1),
+        let name = match self {
+            Pavement => "pavement",
+            PavementTurn => "pavement_turn",
+            PavementT => "pavement_t",
+            PavementCross => "pavement_cross",
         };
-        let imgs = if layers == 1 {
-            vec![(format!("{name}/{name}.png"), 0.)]
-        } else {
-            (0..layers)
-                .map(|layer| (format!("{name}/{name}-{layer}.png"), (layer as f32) / 2.))
-                .collect()
+        let sprite = Sprite {
+            // custom_size: Some(Vec2::new(
+            //     2. * constants.car.size.x,
+            //     2. * constants.car.size.y,
+            // )),
+            ..Default::default()
         };
-        ParallaxImages::new(imgs)
+
+        let indices_heights_sprites = vec![(0, 0.0, sprite)];
+
+        // let imgs = if layers == 1 {
+        //     vec![(format!("{name}/{name}.png"), 0.)]
+        // } else {
+        //     (0..layers)
+        //         .map(|layer| (format!("{name}/{name}-{layer}.png"), (layer as f32) / 2.))
+        //         .collect()
+        // };
+        ParallaxImages::new(
+            format!("{name}/{name}.png"),
+            indices_heights_sprites,
+            Vec2::new(64.0, 64.0),
+            1,
+            1,
+        );
     }
 }
 

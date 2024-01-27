@@ -48,7 +48,7 @@ impl CarBundle {
                 2. * constants.car.size.x,
                 2. * constants.car.size.y,
             )),
-            rect: Some(Rect::new(25., 12., 39., 50.)),
+            // rect: Some(Rect::new(25., 12., 39., 50.)), // TODO not used???
             ..Default::default()
         };
 

@@ -58,12 +58,20 @@ impl Default for CarConstants {
     }
 }
 
-#[derive(Resource, Reflect, Default, InspectorOptions)]
+#[derive(Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct UiConstants {
-    #[inspector(min = 10.0, max = 70.0)]
     pub font_size: f32,
-    #[inspector(min = 10.0, max = 70.0)]
     pub fps_text_padding: f32,
     pub font_color: Color,
+}
+
+impl Default for UiConstants {
+    fn default() -> Self {
+        Self {
+            font_size: 20.,
+            fps_text_padding: 10.,
+            font_color: Color::rgb(255., 255., 255.)
+        }
+    }
 }

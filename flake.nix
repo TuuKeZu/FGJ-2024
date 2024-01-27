@@ -53,6 +53,8 @@
             )
             || (craneLib.filterCargoSources path type);
         };
+
+        doNotRemoveReferencesToVendorDir = true;
         strictDeps = true;
         cargoExtraArgs = "--no-default-features";
         installPhaseCommand = ''

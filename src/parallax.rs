@@ -11,26 +11,48 @@ impl Plugin for ParallaxPlugin {
     }
 }
 
-#[derive(Bundle, Default)]
+#[derive(Bundle)]
 pub struct ParallaxSprite {
     pub transform: TransformBundle,
     pub visibility: VisibilityBundle,
-    pub sprite: Sprite,
     pub images: ParallaxImages,
 }
 
-#[derive(Component, Default)]
-pub struct ParallaxImages(Vec<(String, f32)>);
+#[derive(Component)]
+pub struct ParallaxImages {
+    /// Path to the atlas
+    path: String,
+    /// A vector with indices, height and sprites. This supports creating
+    /// multiple layers with the same index to the atlas. The only fields used
+    /// from the sprite are `color`, `flip_{x,y}`, `custom_size`, `anchor`
+    indices_heights_sprites: Vec<(usize, f32, Sprite)>,
+    /// Passed to [`TextureAtlas::from_grid`]
+    tile_size: Vec2,
+    columns: usize,
+    rows: usize,
+}
 
 impl ParallaxImages {
-    pub fn new(images: Vec<(impl Into<String>, f32)>) -> Self {
-        Self(images.into_iter().map(|(i, h)| (i.into(), h)).collect())
+    pub fn new(
+        path: impl Into<String>,
+        indices_heights_sprites: Vec<(usize, f32, Sprite)>,
+        tile_size: Vec2,
+        columns: usize,
+        rows: usize,
+    ) -> Self {
+        Self {
+            path: path.into(),
+            indices_heights_sprites,
+            tile_size,
+            columns,
+            rows,
+        }
     }
 }
 
 #[derive(Bundle)]
 struct ParallaxLayer {
-    sprite: SpriteBundle,
+    sprite_bundle: SpriteSheetBundle,
     height: ParallaxHeight,
 }
 
@@ -41,20 +63,45 @@ pub struct ParallaxHeight {
 
 pub fn add_layers(
     mut commands: Commands,
-    sprites_without_layers: Query<(Entity, &ParallaxImages, &Sprite), Added<ParallaxImages>>,
+    added_entities_without_layers: Query<(Entity, &ParallaxImages), Added<ParallaxImages>>,
     asset_server: Res<AssetServer>,
+    mut texture_atlases: ResMut<Assets<TextureAtlas>>,
 ) {
-    for (entity, images, sprite) in sprites_without_layers.iter() {
+    for (
+        entity,
+        ParallaxImages {
+            path,
+            indices_heights_sprites,
+            tile_size,
+            columns,
+            rows,
+        },
+    ) in added_entities_without_layers.iter()
+    {
         commands.entity(entity).with_children(|parent| {
-            for image in &images.0 {
+            let tah = asset_server.get_handle(path).unwrap_or_else(|| {
+                let handle = asset_server.load(path);
+                let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
+                texture_atlases.add(ta)
+            });
+
+            for (index, height, sprite) in indices_heights_sprites {
+                let sprite = TextureAtlasSprite {
+                    color: sprite.color,
+                    index: *index,
+                    flip_x: sprite.flip_x,
+                    flip_y: sprite.flip_y,
+                    custom_size: sprite.custom_size,
+                    anchor: sprite.anchor,
+                };
                 parent.spawn(ParallaxLayer {
-                    sprite: SpriteBundle {
-                        sprite: sprite.clone(),
-                        texture: asset_server.load(&image.0),
+                    sprite_bundle: SpriteSheetBundle {
+                        sprite,
+                        texture_atlas: tah.clone(),
                         ..Default::default()
                     },
                     height: ParallaxHeight {
-                        pos: Vec3::new(0., 0., image.1),
+                        pos: Vec3::new(0., 0., *height),
                     },
                 });
             }

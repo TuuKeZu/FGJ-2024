@@ -43,6 +43,20 @@ pub struct CarBundle {
 
 impl CarBundle {
     pub fn spawn(commands: &mut Commands, constants: Res<Constants>) {
+        let sprite = Sprite {
+            custom_size: Some(Vec2::new(
+                2. * constants.car.size.x,
+                2. * constants.car.size.y,
+            )),
+            rect: Some(Rect::new(25., 12., 39., 50.)),
+            ..Default::default()
+        };
+
+        // TODO helper for for this
+        let indices_heights_sprites = (0..4)
+            .map(|index| (3 - index, index as f32 + 0.5, sprite.clone()))
+            .collect::<Vec<_>>();
+
         let car = CarBundle {
             car: Car {},
             state: CarState {
@@ -51,21 +65,15 @@ impl CarBundle {
                 passenger: false,
             },
             sprite: ParallaxSprite {
-                sprite: Sprite {
-                    custom_size: Some(Vec2::new(
-                        2. * constants.car.size.x,
-                        2. * constants.car.size.y,
-                    )),
-                    rect: Some(Rect::new(25., 12., 39., 50.)),
-                    ..Default::default()
-                },
-                images: ParallaxImages::new(vec![
-                    ("car/car-0.png", 0.0),
-                    ("car/car-1.png", 0.5),
-                    ("car/car-2.png", 1.0),
-                    ("car/car-3.png", 1.5),
-                ]),
-                ..Default::default()
+                images: ParallaxImages::new(
+                    "car/car.png",
+                    indices_heights_sprites,
+                    Vec2::new(64., 64.),
+                    1,
+                    4,
+                ),
+                visibility: VisibilityBundle::default(),
+                transform: TransformBundle::default(),
             },
             active_events: ActiveEvents::COLLISION_EVENTS,
             // rb: RigidBody::Dynamic,
@@ -84,7 +92,8 @@ impl CarBundle {
 
         let car = commands
             .spawn(car)
-            .insert(RigidBody::Dynamic)
+            // TODO .insert(RigidBody::Dynamic)
+            .insert(RigidBody::Fixed)
             .insert(GravityScale(0.))
             .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
             .insert(ColliderMassProperties::Mass(0.1))

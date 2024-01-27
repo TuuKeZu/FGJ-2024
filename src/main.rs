@@ -19,6 +19,7 @@ use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod appstate;
+mod buildings;
 mod car;
 mod constants;
 mod dialogues;
@@ -70,6 +71,7 @@ fn main() {
         setup_tilemap,
         setup_trigger,
         setup_physics,
+        setup_buildings,
         setup_dialogues,
         setup_ui.after(setup_dialogues),
     );

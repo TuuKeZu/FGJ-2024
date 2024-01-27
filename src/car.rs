@@ -87,6 +87,14 @@ impl CarBundle {
             .insert(RigidBody::Dynamic)
             .insert(GravityScale(0.))
             .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
+            .insert(ColliderMassProperties::Mass(0.1))
+            .insert(ReadMassProperties::default())
+            .insert(Velocity::default())
+            .insert(ExternalForce::default())
+            .insert(Damping {
+                linear_damping: 1.,
+                angular_damping: 1.,
+            })
             .id();
 
         commands.entity(car).with_children(|parent| {
@@ -102,6 +110,7 @@ impl CarBundle {
                 .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
+                // .insert(LockedAxes::TRANSLATION_LOCKED_Y)
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
 
             let mut joint = FixedJointBuilder::new()
@@ -115,13 +124,16 @@ impl CarBundle {
                 .insert(GravityScale(0.))
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
+                // .insert(LockedAxes::TRANSLATION_LOCKED_Y)
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
 
             // Spawn front tires
-            let mut joint = RevoluteJointBuilder::new()
-                .local_anchor1(Vec2::new(-62., 80.))
+            let joint_builder = RevoluteJointBuilder::new()
                 .local_anchor2(Vec2::new(0., 10.))
-                .build();
+                .limits([-0.5, 0.5])
+                .motor_model(MotorModel::ForceBased)
+                .motor(0., 0., 1., 0.3);
+            let mut joint = joint_builder.local_anchor1(Vec2::new(-62., 80.)).build();
             joint.set_contacts_enabled(false);
 
             parent
@@ -132,12 +144,10 @@ impl CarBundle {
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
+                // .insert(LockedAxes::TRANSLATION_LOCKED_Y)
                 .insert(Velocity::zero());
 
-            let mut joint = RevoluteJointBuilder::new()
-                .local_anchor1(Vec2::new(62., 80.))
-                .local_anchor2(Vec2::new(0., 10.))
-                .build();
+            let mut joint = joint_builder.local_anchor1(Vec2::new(62., 80.)).build();
             joint.set_contacts_enabled(false);
 
             parent
@@ -148,6 +158,7 @@ impl CarBundle {
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
+                // .insert(LockedAxes::TRANSLATION_LOCKED_Y)
                 .insert(Velocity::zero());
         });
     }
@@ -160,26 +171,64 @@ pub struct TireBundle {
     impulse: ExternalImpulse,
     transform: TransformBundle,
     velocity: Velocity,
+    rmp: ReadMassProperties,
 }
 
 #[derive(Component, Default)]
-pub struct Tire;
+pub struct Tire {
+    force: Vec2,
+}
 
 #[derive(Component)]
 pub struct Steering;
 
 pub fn tire_friction(
     _constants: Res<Constants>,
+    time: Res<Time>,
     mut tires: Query<
-        (&mut ExternalImpulse, &GlobalTransform, &Velocity),
-        (With<Tire>, With<Steering>),
+        (
+            &mut Tire,
+            &GlobalTransform,
+            &mut Velocity,
+            &Parent,
+            &ReadMassProperties,
+        ),
+        Without<Car>,
     >,
+    cars: Query<&ReadMassProperties, With<Car>>,
 ) {
-    for (mut impulse, transform, velocity) in tires.iter_mut() {
+    let mut printed = false;
+    for (mut tire, transform, mut velocity, parent, mass) in tires.iter_mut() {
         let (_scale, rotation, _translation) = transform.to_scale_rotation_translation();
-        let global_tire_axis = rotation.mul_vec3(Vec3::new(0., 1., 0.)).xy();
-        let fix_vel = velocity.linvel - velocity.linvel.project_onto(global_tire_axis);
-        impulse.impulse = -0.01 * fix_vel;
+        // let global_tire_axis = rotation.mul_vec3(Vec3::new(0., 1., 0.)).xy();
+        // let normal = velocity.linvel.project_onto(global_tire_axis);
+        // let ortho = velocity.linvel - normal;
+
+        // if !printed {
+        //     printed = true;
+        //     // println!("{global_tire_axis:?}");
+        //     // println!(
+        //     //     "New vel: {:?} + {:?} ({}) = {:?}",
+        //     //     normal,
+        //     //     ortho,
+        //     //     ortho.dot(global_tire_axis),
+        //     //     velocity.linvel
+        //     // );
+        //     assert!(ortho.dot(global_tire_axis) < 1e-3);
+        // }
+        // // let fix_vel = velocity.linvel - velocity.linvel.project_onto(global_tire_axis);
+        // // impulse.impulse = -0.001 * ortho;
+        // // velocity.linvel -= 2.*ortho;
+        // // velocity.linvel -= ortho;
+        // impulse.impulse = -0.3 * time.delta_seconds() * ortho / 4.;
+        if let Ok(car_mass) = cars.get(parent.get()) {
+            let local_velocity = rotation
+                .inverse()
+                .mul_vec3(Vec3::new(velocity.linvel.x, velocity.linvel.y, 0.))
+                .xy();
+            tire.force.x +=
+                -1. * time.delta_seconds() * local_velocity.x / (0.25 * car_mass.mass + mass.mass);
+        }
     }
 }
 
@@ -187,8 +236,13 @@ pub fn car_control(
     keyboard_input: Res<Input<KeyCode>>,
     _constants: Res<Constants>,
     mut tires: Query<
-        (&mut ExternalForce, &mut Transform, &GlobalTransform),
-        (With<Tire>, With<Steering>),
+        (
+            &mut Tire,
+            &mut ExternalForce,
+            &mut Transform,
+            &GlobalTransform,
+        ),
+        (With<Steering>),
     >,
 ) {
     let mut acceleration_force = 0.;
@@ -200,19 +254,65 @@ pub fn car_control(
         acceleration_force += -100.;
     }
     if keyboard_input.pressed(KeyCode::Left) {
-        steering += 1.;
+        steering += 0.4;
     }
     if keyboard_input.pressed(KeyCode::Right) {
-        steering += -1.;
+        steering += -0.4;
     }
 
-    for (mut force, mut transform, global_transform) in tires.iter_mut() {
+    for (mut tire, mut force, mut transform, global_transform) in tires.iter_mut() {
         let (_scale, rotation, _translation) = global_transform.to_scale_rotation_translation();
 
-        force.force = rotation
-            .mul_vec3(Vec3::new(0., acceleration_force, 0.))
-            .xy();
+        // force.force = rotation
+        //     .mul_vec3(Vec3::new(0., acceleration_force, 0.))
+        //     .xy();
+        tire.force.y += acceleration_force;
+
         transform.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), steering);
+    }
+}
+
+pub fn update_car_velocity(
+    mut car: Query<(&mut Velocity, &Children), Without<Tire>>,
+    tires: Query<&Velocity, With<Tire>>,
+) {
+    for (mut car_vel, children) in car.iter_mut() {
+        let mut new_vel = Vec2::new(0., 0.);
+        let mut tire_count = 0;
+        for &child in children {
+            if let Ok(tire) = tires.get(child) {
+                new_vel += tire.linvel;
+                tire_count += 1;
+            }
+        }
+        new_vel *= 1. / tire_count as f32;
+        // car_vel.linvel = new_vel;
+        // println!("Setting car velocity to {new_vel:?}");
+    }
+}
+
+pub fn reset_tires(mut tires: Query<&mut Tire>) {
+    for mut tire in tires.iter_mut() {
+        // tire.force = Vec2::new(0., 0.);
+    }
+}
+
+pub fn update_tire_forces(
+    mut cars: Query<(&mut Velocity, &Children), Without<Tire>>,
+    mut tires: Query<(&mut Tire, &GlobalTransform, &Parent, &mut ExternalForce)>,
+) {
+    for (mut tire, transform, parent, mut force) in tires.iter_mut() {
+        let (_scale, rotation, _translation) = transform.to_scale_rotation_translation();
+
+        // println!("Applying force: {:?}", tire.force);
+        let f = rotation
+            .mul_vec3(Vec3::new(tire.force.x, tire.force.y, 0.))
+            .xy();
+
+        if let Ok(car) = cars.get(parent.get()) {}
+
+        force.force = f;
+        tire.force = Vec2::new(0., 0.);
     }
 }
 

@@ -10,6 +10,9 @@ use bevy_common_assets::json::JsonAssetPlugin;
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
+use car::reset_tires;
+use car::update_car_velocity;
+use car::update_tire_forces;
 use car::{car_control, tire_friction};
 use constants::Constants;
 use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueList, DialogueState};
@@ -45,7 +48,7 @@ fn main() {
             }),
         AppState::splash_screen(),
         FrameTimeDiagnosticsPlugin,
-        RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
+        RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0), //.in_fixed_schedule(),
         RapierDebugRenderPlugin::default(),
         EguiPlugin,
         DefaultInspectorConfigPlugin,
@@ -60,7 +63,6 @@ fn main() {
         camera_follow,
         handle_dialogue_ui,
         handle_trigger_collisions,
-        tire_friction,
         car_control,
     );
     let startup = (
@@ -82,5 +84,15 @@ fn main() {
         .add_plugins(plugins)
         .add_systems(Update, update)
         .add_systems(Startup, startup)
+        .add_systems(
+            FixedUpdate,
+            tire_friction.run_if(input_toggle_active(false, KeyCode::F5)),
+        )
+        .add_systems(FixedUpdate, update_car_velocity.after(tire_friction))
+        .add_systems(FixedUpdate, update_tire_forces.after(tire_friction))
+        .add_systems(
+            PostUpdate,
+            reset_tires.before(tire_friction).before(car_control),
+        )
         .run();
 }

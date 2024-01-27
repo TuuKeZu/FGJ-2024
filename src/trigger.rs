@@ -21,9 +21,8 @@ pub struct Trigger {}
 #[derive(Debug, Clone, Copy, Component)]
 pub enum TriggerType {
     StartMission,
-    StopMission
+    StopMission,
 }
-
 
 #[derive(Bundle)]
 pub struct TriggerBundle {
@@ -66,8 +65,7 @@ impl TriggerBundle {
 }
 
 pub fn setup_trigger(mut commands: Commands, constants: Res<Constants>) {
-    commands
-        .spawn(TriggerBundle::new(&constants));
+    commands.spawn(TriggerBundle::new(&constants));
     commands
         .spawn(TriggerBundle::new(&constants))
         .insert(TriggerType::StopMission)
@@ -92,24 +90,31 @@ pub fn handle_trigger_collisions(
                     return;
                 }
 
-                if let Some(trigger_type) = spawn_q.iter().find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id()).map(|(e, t)| t) {
+                if let Some(trigger_type) = spawn_q
+                    .iter()
+                    .find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id())
+                    .map(|(e, t)| t)
+                {
                     dbg!(trigger_type);
                     match trigger_type {
-                        TriggerType::StartMission => {},
-                        TriggerType::StopMission => {},
+                        TriggerType::StartMission => {}
+                        TriggerType::StopMission => {}
                     }
                 }
-                    
             }
             CollisionEvent::Stopped(_, sensor, flags) => {
                 if flags != &CollisionEventFlags::SENSOR {
                     return;
                 }
 
-                if let Some(trigger_type) = spawn_q.iter().find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id()).map(|(e, t)| t) {
+                if let Some(trigger_type) = spawn_q
+                    .iter()
+                    .find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id())
+                    .map(|(e, t)| t)
+                {
                     match trigger_type {
-                        TriggerType::StartMission => {},
-                        TriggerType::StopMission => {},
+                        TriggerType::StartMission => {}
+                        TriggerType::StopMission => {}
                     }
                 }
             }

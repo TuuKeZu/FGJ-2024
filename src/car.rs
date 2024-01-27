@@ -89,61 +89,67 @@ impl CarBundle {
             .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
             .id();
 
-        // Spawn back tires
-        let mut joint = FixedJointBuilder::new()
-            .local_anchor1(Vec2::new(-42., -80.))
-            .build();
-        joint.set_contacts_enabled(false);
+        commands.entity(car).with_children(|parent| {
+            // Spawn back tires
+            let mut joint = FixedJointBuilder::new()
+                .local_anchor1(Vec2::new(-42., -80.))
+                .build();
+            joint.set_contacts_enabled(false);
 
-        commands
-            .spawn(TireBundle::default())
-            .insert(RigidBody::Dynamic)
-            .insert(GravityScale(0.))
-            .insert(ImpulseJoint::new(car, joint))
-            .insert(Collider::round_cuboid(1., 10., 0.1))
-            .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
+            parent
+                .spawn(TireBundle::default())
+                .insert(RigidBody::Dynamic)
+                .insert(GravityScale(0.))
+                .insert(ImpulseJoint::new(car, joint))
+                .insert(Collider::round_cuboid(1., 10., 0.1))
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
 
-        let mut joint = FixedJointBuilder::new()
-            .local_anchor1(Vec2::new(42., -80.))
-            .build();
-        joint.set_contacts_enabled(false);
+            let mut joint = FixedJointBuilder::new()
+                .local_anchor1(Vec2::new(42., -80.))
+                .build();
+            joint.set_contacts_enabled(false);
 
-        commands
-            .spawn(TireBundle::default())
-            .insert(RigidBody::Dynamic)
-            .insert(GravityScale(0.))
-            .insert(ImpulseJoint::new(car, joint))
-            .insert(Collider::round_cuboid(1., 10., 0.1))
-            .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
+            parent
+                .spawn(TireBundle::default())
+                .insert(RigidBody::Dynamic)
+                .insert(GravityScale(0.))
+                .insert(ImpulseJoint::new(car, joint))
+                .insert(Collider::round_cuboid(1., 10., 0.1))
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
 
-        // Spawn front tires
-        let mut joint = FixedJointBuilder::new()
-            .local_anchor1(Vec2::new(-42., 80.))
-            .build();
-        joint.set_contacts_enabled(false);
+            // Spawn front tires
+            let mut joint = RevoluteJointBuilder::new()
+                .local_anchor1(Vec2::new(-62., 80.))
+                .local_anchor2(Vec2::new(0., 10.))
+                .build();
+            joint.set_contacts_enabled(false);
 
-        commands
-            .spawn(TireBundle::default())
-            .insert(Steering)
-            .insert(RigidBody::Dynamic)
-            .insert(GravityScale(0.))
-            .insert(ImpulseJoint::new(car, joint))
-            .insert(Collider::round_cuboid(1., 10., 0.1))
-            .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
+            parent
+                .spawn(TireBundle::default())
+                .insert(Steering)
+                .insert(RigidBody::Dynamic)
+                .insert(GravityScale(0.))
+                .insert(ImpulseJoint::new(car, joint))
+                .insert(Collider::round_cuboid(1., 10., 0.1))
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
+                .insert(Velocity::zero());
 
-        let mut joint = FixedJointBuilder::new()
-            .local_anchor1(Vec2::new(42., 80.))
-            .build();
-        joint.set_contacts_enabled(false);
+            let mut joint = RevoluteJointBuilder::new()
+                .local_anchor1(Vec2::new(62., 80.))
+                .local_anchor2(Vec2::new(0., 10.))
+                .build();
+            joint.set_contacts_enabled(false);
 
-        commands
-            .spawn(TireBundle::default())
-            .insert(Steering)
-            .insert(RigidBody::Dynamic)
-            .insert(GravityScale(0.))
-            .insert(ImpulseJoint::new(car, joint))
-            .insert(Collider::round_cuboid(1., 10., 0.1))
-            .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
+            parent
+                .spawn(TireBundle::default())
+                .insert(Steering)
+                .insert(RigidBody::Dynamic)
+                .insert(GravityScale(0.))
+                .insert(ImpulseJoint::new(car, joint))
+                .insert(Collider::round_cuboid(1., 10., 0.1))
+                .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)))
+                .insert(Velocity::zero());
+        });
     }
 }
 
@@ -151,6 +157,9 @@ impl CarBundle {
 pub struct TireBundle {
     tire: Tire,
     force: ExternalForce,
+    impulse: ExternalImpulse,
+    transform: TransformBundle,
+    velocity: Velocity,
 }
 
 #[derive(Component, Default)]
@@ -159,25 +168,51 @@ pub struct Tire;
 #[derive(Component)]
 pub struct Steering;
 
-pub fn tire_friction(_constants: Res<Constants>, _tires: Query<&mut ExternalForce, With<Tire>>) {}
+pub fn tire_friction(
+    _constants: Res<Constants>,
+    mut tires: Query<
+        (&mut ExternalImpulse, &GlobalTransform, &Velocity),
+        (With<Tire>, With<Steering>),
+    >,
+) {
+    for (mut impulse, transform, velocity) in tires.iter_mut() {
+        let (_scale, rotation, _translation) = transform.to_scale_rotation_translation();
+        let global_tire_axis = rotation.mul_vec3(Vec3::new(0., 1., 0.)).xy();
+        let fix_vel = velocity.linvel - velocity.linvel.project_onto(global_tire_axis);
+        impulse.impulse = -0.01 * fix_vel;
+    }
+}
 
 pub fn car_control(
     keyboard_input: Res<Input<KeyCode>>,
     _constants: Res<Constants>,
-    mut tires: Query<(&mut ExternalForce, &GlobalTransform), (With<Tire>, With<Steering>)>,
-    // mut query: Query<(&mut ExternalForce, &mut Transform, &mut CarState), With<Car>>,
+    mut tires: Query<
+        (&mut ExternalForce, &mut Transform, &GlobalTransform),
+        (With<Tire>, With<Steering>),
+    >,
 ) {
     let mut acceleration_force = 0.;
+    let mut steering = 0.;
     if keyboard_input.pressed(KeyCode::Up) {
         acceleration_force += 100.;
     }
     if keyboard_input.pressed(KeyCode::Down) {
         acceleration_force += -100.;
     }
+    if keyboard_input.pressed(KeyCode::Left) {
+        steering += 1.;
+    }
+    if keyboard_input.pressed(KeyCode::Right) {
+        steering += -1.;
+    }
 
-    for (_force, _transform) in tires.iter_mut() {
+    for (mut force, mut transform, global_transform) in tires.iter_mut() {
+        let (_scale, rotation, _translation) = global_transform.to_scale_rotation_translation();
 
-        // tire.force = transform.
+        force.force = rotation
+            .mul_vec3(Vec3::new(0., acceleration_force, 0.))
+            .xy();
+        transform.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), steering);
     }
 }
 

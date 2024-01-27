@@ -32,7 +32,7 @@ enum AppState {
 
 fn main() {
     let plugins = (
-        DefaultPlugins,
+        DefaultPlugins.set(ImagePlugin::default_nearest()),
         FrameTimeDiagnosticsPlugin,
         RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
         RapierDebugRenderPlugin::default(),

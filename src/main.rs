@@ -11,7 +11,7 @@ use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
-use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueState};
+use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueState, DialogueList};
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod car;
@@ -50,7 +50,7 @@ fn main() {
         EguiPlugin,
         DefaultInspectorConfigPlugin,
         ResourceInspectorPlugin::<Constants>::default(),
-        JsonAssetPlugin::<Dialogue>::new(&["dialogue.json"]),
+        JsonAssetPlugin::<DialogueList>::new(&["dialogues.json"]),
         ParallaxPlugin,
     );
     let update = (

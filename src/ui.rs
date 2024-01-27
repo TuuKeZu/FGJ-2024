@@ -3,6 +3,7 @@ use crate::{
     dialogues::{Dialogue, DialogueBundle, DialogueHandle, DialogueState},
     tilemap::Tile,
 };
+use crate::{constants::*};
 use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,

@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{
     car::*,
     constants::Constants,
-    dialogues::{Dialogue, DialogueHandle, DialogueState},
+    dialogues::{Dialogue, DialogueHandle, DialogueState, DialogueList},
 };
 
 pub fn setup_graphics(mut commands: Commands) {
@@ -18,7 +18,7 @@ pub fn camera_follow(
     car_q: Query<&Transform, With<Car>>,
     mut camera_q: Query<&mut Transform, (With<Camera2d>, Without<Car>)>,
     mut dialogue_state: ResMut<DialogueState>,
-    dialogues: ResMut<Assets<Dialogue>>,
+    dialogues: ResMut<Assets<DialogueList>>,
     dialogue: Res<DialogueHandle>,
 ) {
     let car_transform = car_q.get_single().unwrap();
@@ -29,6 +29,6 @@ pub fn camera_follow(
     camera_transform.translation.y = car_transform.translation.y;
 
     if !dialogue_state.active {
-        dialogue_state.load_dialogue(dialogues, dialogue);
+        dialogue_state.load_dialogue("p1", dialogues, dialogue);
     }
 }

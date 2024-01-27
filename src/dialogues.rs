@@ -1,36 +1,91 @@
 use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
-use std::fs;
+use std::{fs, time::Duration, collections::VecDeque};
 
+use bevy::prelude::*;
 use crate::constants::Constants;
 
+
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
-pub struct Dialogue {
-    pub list: Vec<DialogueSection>,
+#[serde(transparent)]
+pub struct DialogueList {
+    pub list: Vec<Dialogue>,
 }
 
-impl Dialogue {
-    pub fn next_dialogue(&mut self) -> Option<DialogueSection> {
-        self.list.pop()
+impl DialogueList {
+    pub fn get(&self, name: &str) -> Option<Dialogue> {
+        self.list.iter().find(|d| d.name == name).cloned()
     }
 }
 
-#[derive(Resource)]
-pub struct DialogueHandle(Handle<Dialogue>);
+#[derive(Debug, Clone, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
+pub struct Dialogue {
+    pub name: String,
+    pub list: VecDeque<DialogueSection>,
+    current: Option<DialogueSection>
+}
+
+impl Dialogue {
+    pub fn next_dialogue(&mut self) -> Option<DialogueContent> {
+        match &mut self.current {
+            Some(section) => {
+                let text = section.next_dialogue();
+                if text.is_none() {
+                    self.current = self.list.pop_front();
+                    return self.next_dialogue();
+                }
+
+                return Some(DialogueContent::new(section.character, text.unwrap()));
+            },
+            None => {
+                self.current = self.list.pop_front();
+
+                if self.current.is_none() {
+                    return None;
+                }
+
+                return self.next_dialogue();
+            }
+        }
+
+    }
+}
 
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
+pub struct DialogueContent {
+    character: DialogueCharacter,
+    text: String
+}
+
+impl DialogueContent {
+    fn new(character: DialogueCharacter, text: String) -> Self {
+        Self {
+            text,
+            character
+        }
+    }
+}
+
+
+#[derive(Resource)]
+pub struct DialogueHandle(Handle<DialogueList>);
+
+
+
+#[derive(Debug, Clone, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub struct DialogueSection {
     pub character: DialogueCharacter,
-    pub list: Vec<String>,
+    pub list: VecDeque<String>,
 }
 
 impl DialogueSection {
     pub fn next_dialogue(&mut self) -> Option<String> {
-        self.list.pop()
+        let text = self.list.pop_front();
+        text
     }
 }
 
-#[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
+#[derive(Debug, Clone, Copy, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub enum DialogueCharacter {
     Driver,
     Passenger,
@@ -38,6 +93,7 @@ pub enum DialogueCharacter {
 
 #[derive(Resource, Default)]
 pub struct DialogueState {
+    pub timer: Timer,
     pub current: Option<Dialogue>,
     pub active: bool,
 }
@@ -45,12 +101,14 @@ pub struct DialogueState {
 impl DialogueState {
     pub fn load_dialogue(
         &mut self,
-        mut dialogues: ResMut<Assets<Dialogue>>,
+        name: &str,
+        mut dialogues: ResMut<Assets<DialogueList>>,
         dialogue: Res<DialogueHandle>,
     ) {
         if let Some(dialogue) = dialogues.remove(dialogue.0.id()) {
-            self.current = Some(dialogue);
+            self.current = dialogue.get(name);
             self.active = true;
+            self.timer = Timer::new(Duration::from_secs(2), TimerMode::Repeating);
         }
     }
 }
@@ -68,14 +126,11 @@ impl DialogueBundle {
     pub fn new(constants: Res<Constants>, font: Handle<Font>) -> Self {
         Self {
             text_bundle: TextBundle::from_sections([
-                TextSection::new(
-                    "character: ",
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: constants.ui.font_size,
-                        color: constants.ui.font_color,
-                    },
-                ),
+                TextSection::from_style(TextStyle {
+                    font: font.clone(),
+                    font_size: constants.ui.font_size,
+                    color: constants.ui.font_color,
+                }),
                 TextSection::from_style(TextStyle {
                     font,
                     font_size: constants.ui.font_size,
@@ -94,19 +149,37 @@ impl DialogueBundle {
 }
 
 pub fn setup_dialogues(mut commands: Commands, asset_server: Res<AssetServer>) {
-    let dialogue = DialogueHandle(asset_server.load("dialogues/p1.dialogue.json"));
-    commands.insert_resource(dialogue);
-
-    let dialogue = DialogueHandle(asset_server.load("dialogues/p2.dialogue.json"));
-    commands.insert_resource(dialogue);
+    let p1 = DialogueHandle(asset_server.load("dialogues/passenger.dialogues.json"));
+    commands.insert_resource(p1);
 }
 
 pub fn handle_dialogue_ui(
-    mut state: ResMut<DialogueState>,
     mut ui_q: Query<&mut Text, With<DialogueText>>,
+    mut state: ResMut<DialogueState>,
+    time: Res<Time>,
+    dialogues: ResMut<Assets<DialogueList>>,
+    dialogue: Res<DialogueHandle>,
 ) {
-    for mut text in &mut ui_q {
+    if state.active {
 
-        //text.sections[1].value = format!("{:#?}", state.current);
+        // TODO dynamic timer
+        state.timer.tick(time.delta());
+
+        if state.timer.finished() {
+            if let Some(current) = &mut state.current {
+                if let Some(content) = current.next_dialogue() {
+                    for mut text in &mut ui_q {
+                        text.sections[0].value = format!("{:?}: ", content.character);
+                        text.sections[1].value = content.text.clone();
+                    }
+                } else {
+                    for mut text in &mut ui_q {
+                        text.sections[0].value = String::from("");
+                        text.sections[1].value = String::from("");
+                    }
+                    state.active = false;
+                }
+            }
+        }
     }
 }

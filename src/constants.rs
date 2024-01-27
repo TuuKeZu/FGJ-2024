@@ -20,17 +20,20 @@ pub struct PhysicsConstants {
     pub engine_force: f32,
     pub turn_force: f32,
     pub steering_force: f32,
+    #[inspector(min = 1.0, max = 700.0)]
+    pub camera_height: f32,
 }
 
 impl Default for PhysicsConstants {
     fn default() -> Self {
         Self {
-            size: Vec2::new(50., 100.),
+            size: Vec2::new(42., 114.),
             linear_damping: 3.,
             angular_damping: 1.,
             engine_force: 250.,
             turn_force: 150.,
             steering_force: 10.,
+            camera_height: 20.,
         }
     }
 }

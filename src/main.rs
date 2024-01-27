@@ -10,8 +10,6 @@ use bevy_common_assets::json::JsonAssetPlugin;
 use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
-use car::reset_tires;
-use car::update_car_velocity;
 use car::update_tire_forces;
 use car::{car_control, tire_friction};
 use constants::Constants;
@@ -92,11 +90,6 @@ fn main() {
         .add_systems(Update, update)
         .add_systems(Startup, startup)
         .add_systems(FixedUpdate, tire_friction)
-        .add_systems(FixedUpdate, update_car_velocity.after(tire_friction))
         .add_systems(FixedUpdate, update_tire_forces.after(tire_friction))
-        .add_systems(
-            PostUpdate,
-            reset_tires.before(tire_friction).before(car_control),
-        )
         .run();
 }

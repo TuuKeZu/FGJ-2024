@@ -5,7 +5,6 @@ use bevy_rapier2d::prelude::*;
 use crate::{components::*, constants::Constants};
 
 pub fn setup_graphics(mut commands: Commands) {
-    // Add a camera so we can see the debug-render.
     commands.spawn(Camera2dBundle::default());
 }
 

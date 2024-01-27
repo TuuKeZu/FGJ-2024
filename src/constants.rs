@@ -9,6 +9,7 @@ use bevy_inspector_egui::InspectorOptions;
 pub struct Constants {
     pub ui: UiConstants,
     pub car: CarConstants,
+    pub camera: CameraConstants,
 }
 
 #[derive(Resource, Reflect, InspectorOptions)]
@@ -26,11 +27,23 @@ pub struct CarConstants {
     pub head_pointed_start: Vec2,
     pub close_to_zero: f32,
 }
+#[derive(Resource, Reflect, InspectorOptions)]
+#[reflect(InspectorOptions)]
+pub struct CameraConstants {
+    #[inspector(min = 1.0, max = 700.0)]
+    pub camera_height: f32,
+}
+
+impl Default for CameraConstants {
+    fn default() -> Self {
+        Self { camera_height: 50. }
+    }
+}
 
 impl Default for CarConstants {
     fn default() -> Self {
         Self {
-            size: Vec2::new(50., 100.),
+            size: Vec2::new(42., 114.),
             linear_damping: 3.,
             angular_damping: 1.,
             engine_force: 250.,

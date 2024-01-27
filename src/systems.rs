@@ -5,7 +5,6 @@ use bevy_rapier2d::prelude::*;
 use crate::{components::*, constants::Constants};
 
 pub fn setup_graphics(mut commands: Commands) {
-    // Add a camera so we can see the debug-render.
     commands.spawn(Camera2dBundle::default());
 }
 
@@ -22,7 +21,6 @@ pub fn move_car(
     let mut moving_y = false;
     let mut moving_angular = false;
 
-    dbg!(carstate.steering_angle);
     let head_pointed_angle = carstate
         .head_pointed_at
         .angle_between(constants.car.head_pointed_start);

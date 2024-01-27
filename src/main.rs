@@ -9,9 +9,11 @@ use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
+use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod components;
 mod constants;
+mod parallax;
 mod systems;
 mod tilemap;
 mod ui;
@@ -25,14 +27,14 @@ fn main() {
         EguiPlugin,
         DefaultInspectorConfigPlugin,
         ResourceInspectorPlugin::<Constants>::default(),
+        ParallaxPlugin,
     );
     let update = (
         world_inspector.run_if(input_toggle_active(false, KeyCode::F1)),
         entity_inspector.run_if(input_toggle_active(false, KeyCode::F2)),
-        show_ball_position,
         move_car,
         show_fps,
-        camera_follow
+        camera_follow,
     );
     let startup = (setup_graphics, setup_tilemap, setup_physics, setup_ui);
 
@@ -40,6 +42,7 @@ fn main() {
         .insert_resource(AssetMetaCheck::Never)
         .init_resource::<Constants>()
         .register_type::<Constants>()
+        .register_type::<ParallaxHeight>()
         .add_plugins(plugins)
         .add_systems(Update, update)
         .add_systems(Startup, startup)

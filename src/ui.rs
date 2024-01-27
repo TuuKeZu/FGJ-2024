@@ -1,4 +1,4 @@
-use crate::constants::*;
+use crate::{constants::*, tilemap::Tile};
 use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
@@ -31,7 +31,9 @@ pub fn entity_inspector(world: &mut World) {
 
     egui::Window::new("Entities").show(egui_context.get_mut(), |ui| {
         egui::ScrollArea::both().show(ui, |ui| {
-            bevy_inspector::ui_for_world_entities(world, ui);
+            bevy_inspector::ui_for_world_entities_filtered::<(Without<Parent>, Without<Tile>)>(
+                world, ui, true,
+            );
             ui.allocate_space(ui.available_size());
         })
     });

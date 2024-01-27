@@ -13,6 +13,8 @@ pub struct Car {}
 pub struct CarState {
     pub head_pointed_at: Vec2,
     pub steering_angle: f32,
+
+    pub passenger: bool,
 }
 
 impl CarState {
@@ -35,6 +37,7 @@ pub struct CarBundle {
     collider: Collider,
     damping: Damping,
     gravity: GravityScale,
+    active_events: ActiveEvents,
     ef: ExternalForce,
 }
 
@@ -45,6 +48,7 @@ impl CarBundle {
             state: CarState {
                 head_pointed_at: constants.car.head_pointed_start,
                 steering_angle: constants.car.steering_angle,
+                passenger: false,
             },
             sprite: ParallaxSprite {
                 sprite: Sprite {
@@ -70,6 +74,7 @@ impl CarBundle {
                 angular_damping: constants.car.angular_damping,
             },
             collider: Collider::cuboid(constants.car.size.x, constants.car.size.y),
+            active_events: ActiveEvents::COLLISION_EVENTS,
             gravity: GravityScale(0.),
             ef: ExternalForce {
                 force: Vec2::ZERO,

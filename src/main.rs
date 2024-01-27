@@ -22,9 +22,11 @@ mod dialogues;
 mod parallax;
 mod systems;
 mod tilemap;
+mod trigger;
 mod ui;
+mod utility;
 
-use dialogues::Dialogue;
+use trigger::{handle_trigger_collisions, setup_trigger};
 
 fn main() {
     let plugins = (
@@ -57,10 +59,12 @@ fn main() {
         show_fps,
         camera_follow,
         handle_dialogue_ui,
+        handle_trigger_collisions,
     );
     let startup = (
         setup_graphics,
         setup_tilemap,
+        setup_trigger,
         setup_physics,
         setup_dialogues,
         setup_ui.after(setup_dialogues),

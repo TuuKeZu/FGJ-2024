@@ -4,15 +4,16 @@ use bevy::render::color::Color;
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
 use bevy_inspector_egui::InspectorOptions;
 
-#[derive(Resource, Reflect, Default, InspectorOptions)]
+#[derive(Resource, Clone, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct Constants {
     pub ui: UiConstants,
     pub car: CarConstants,
     pub camera: CameraConstants,
+    pub trigger: TriggerConstants,
 }
 
-#[derive(Resource, Reflect, InspectorOptions)]
+#[derive(Clone, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct CarConstants {
     pub size: Vec2,
@@ -27,7 +28,7 @@ pub struct CarConstants {
     pub head_pointed_start: Vec2,
     pub close_to_zero: f32,
 }
-#[derive(Resource, Reflect, InspectorOptions)]
+#[derive(Clone, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct CameraConstants {
     #[inspector(min = 1.0, max = 700.0)]
@@ -37,6 +38,22 @@ pub struct CameraConstants {
 impl Default for CameraConstants {
     fn default() -> Self {
         Self { camera_height: 50. }
+    }
+}
+
+#[derive(Clone, Resource, Reflect, InspectorOptions)]
+#[reflect(InspectorOptions)]
+pub struct TriggerConstants {
+    pub size: Vec2,
+    pub color: Color,
+}
+
+impl Default for TriggerConstants {
+    fn default() -> Self {
+        Self {
+            size: Vec2::new(100., 100.),
+            color: Color::rgb(255., 0., 0.),
+        }
     }
 }
 
@@ -58,7 +75,7 @@ impl Default for CarConstants {
     }
 }
 
-#[derive(Resource, Reflect, InspectorOptions)]
+#[derive(Clone, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct UiConstants {
     pub font_size: f32,

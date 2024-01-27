@@ -32,7 +32,18 @@ enum AppState {
 
 fn main() {
     let plugins = (
-        DefaultPlugins.set(ImagePlugin::default_nearest()),
+        DefaultPlugins
+            .set(ImagePlugin::default_nearest())
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    // provide the ID selector string here
+                    canvas: Some("#tango-driver-canvas".into()),
+                    fit_canvas_to_parent: true,
+                    // ... any other window properties ...
+                    ..default()
+                }),
+                ..Default::default()
+            }),
         FrameTimeDiagnosticsPlugin,
         RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
         RapierDebugRenderPlugin::default(),

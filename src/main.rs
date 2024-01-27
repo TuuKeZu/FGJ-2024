@@ -1,4 +1,5 @@
 use crate::systems::*;
+use crate::tilemap::setup_tilemap;
 use crate::ui::*;
 use bevy::{
     asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
@@ -12,6 +13,7 @@ use constants::Constants;
 mod components;
 mod constants;
 mod systems;
+mod tilemap;
 mod ui;
 
 fn main() {
@@ -31,7 +33,7 @@ fn main() {
         move_car,
         show_fps,
     );
-    let startup = (setup_graphics, setup_physics, setup_ui);
+    let startup = (setup_graphics, setup_tilemap, setup_physics, setup_ui);
 
     App::new()
         .insert_resource(AssetMetaCheck::Never)

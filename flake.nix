@@ -25,9 +25,14 @@
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
 
+      assetFilter = path: _type: baseNameOf path != toString ./assets;
+      customFitler = path: type: (assetFilter path type || craneLib.filterCargoSources path type);
       craneLib = crane.lib.${system};
       fgc_2024 = craneLib.buildPackage {
-        src = craneLib.cleanCargoSource (craneLib.path ./.);
+        src = pkgs.lib.cleanSourceWith {
+          src = craneLib.path ./.;
+          filter = customFitler;
+        };
         strictDeps = true;
         cargoExtraArgs = "--no-default-features";
 
@@ -47,20 +52,20 @@
 
       # Use with `watch_tool nix run -L`
       watch_tool = pkgs.writeShellScriptBin "watch_tool" ''
-sigint_handler()
-{
-  kill $PID
-  exit
-}
+        sigint_handler()
+        {
+          kill $PID
+          exit
+        }
 
-trap sigint_handler SIGINT
+        trap sigint_handler SIGINT
 
-while true; do
-  $@ &
-  PID=$!
-  ${pkgs.inotify-tools}/bin/inotifywait -q -e modify -e create -e close_write -r src
-  kill $PID
-done
+        while true; do
+          $@ &
+          PID=$!
+          ${pkgs.inotify-tools}/bin/inotifywait -q -e modify -e create -e close_write -r src
+          kill $PID
+        done
       '';
     in {
       checks = {};

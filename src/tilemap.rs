@@ -8,7 +8,7 @@ pub enum TileType {
 
 #[derive(Component)]
 pub struct Tile {
-    tp: TileType,
+    // tp: TileType,
 }
 
 #[derive(Bundle)]
@@ -17,7 +17,7 @@ pub struct TileBundle {
     sprite: SpriteBundle,
 }
 
-const TILE_SIZE: f32 = 2.;
+const TILE_SIZE: f32 = 32.;
 
 impl TileBundle {
     pub fn new(tp: TileType, pos: Vec3) -> TileBundle {
@@ -26,7 +26,7 @@ impl TileBundle {
             TileType::Building => Color::rgb(0.5, 0.5, 0.5),
         };
         TileBundle {
-            tile: Tile { tp },
+            tile: Tile {},
             sprite: SpriteBundle {
                 sprite: Sprite {
                     custom_size: Some(Vec2::new(TILE_SIZE, TILE_SIZE)),
@@ -51,7 +51,7 @@ pub fn setup_tilemap(mut commands: Commands) {
             } else {
                 TileType::Building
             };
-            commands.spawn(TileBundle::new(tp, Vec3::new(x as f32, y as f32, 0.)));
+            commands.spawn(TileBundle::new(tp, Vec3::new(x as f32, y as f32, -1.)));
         }
     }
 }

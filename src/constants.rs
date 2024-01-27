@@ -71,7 +71,7 @@ impl Default for UiConstants {
         Self {
             font_size: 20.,
             fps_text_padding: 10.,
-            font_color: Color::rgb(255., 255., 255.)
+            font_color: Color::rgb(255., 255., 255.),
         }
     }
 }

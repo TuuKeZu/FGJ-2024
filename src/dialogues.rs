@@ -1,12 +1,12 @@
-use std::fs;
 use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
+use std::fs;
 
 use crate::constants::Constants;
 
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub struct Dialogue {
-    pub list: Vec<DialogueSection>
+    pub list: Vec<DialogueSection>,
 }
 
 impl Dialogue {
@@ -33,7 +33,7 @@ impl DialogueSection {
 #[derive(Debug, serde::Deserialize, bevy::asset::Asset, bevy::reflect::TypePath)]
 pub enum DialogueCharacter {
     Driver,
-    Passenger
+    Passenger,
 }
 
 #[derive(Resource, Default)]
@@ -43,14 +43,17 @@ pub struct DialogueState {
 }
 
 impl DialogueState {
-    pub fn load_dialogue(&mut self, mut dialogues: ResMut<Assets<Dialogue>>, dialogue: Res<DialogueHandle>) {
+    pub fn load_dialogue(
+        &mut self,
+        mut dialogues: ResMut<Assets<Dialogue>>,
+        dialogue: Res<DialogueHandle>,
+    ) {
         if let Some(dialogue) = dialogues.remove(dialogue.0.id()) {
             self.current = Some(dialogue);
             self.active = true;
         }
-    }    
+    }
 }
-
 
 #[derive(Component)]
 pub struct DialogueText {}
@@ -98,10 +101,12 @@ pub fn setup_dialogues(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(dialogue);
 }
 
-pub fn handle_dialogue_ui(mut state: ResMut<DialogueState>, mut ui_q: Query<&mut Text, With<DialogueText>>) {
+pub fn handle_dialogue_ui(
+    mut state: ResMut<DialogueState>,
+    mut ui_q: Query<&mut Text, With<DialogueText>>,
+) {
     for mut text in &mut ui_q {
 
         //text.sections[1].value = format!("{:#?}", state.current);
-
     }
 }

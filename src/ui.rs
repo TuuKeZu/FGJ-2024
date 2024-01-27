@@ -1,4 +1,8 @@
-use crate::{constants::*, dialogues::{DialogueBundle, DialogueState, Dialogue, DialogueHandle}, tilemap::Tile};
+use crate::{
+    constants::*,
+    dialogues::{Dialogue, DialogueBundle, DialogueHandle, DialogueState},
+    tilemap::Tile,
+};
 use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
@@ -38,11 +42,7 @@ pub fn entity_inspector(world: &mut World) {
     });
 }
 
-pub fn setup_ui(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    constants: Res<Constants>,
-) {
+pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>, constants: Res<Constants>) {
     let font = asset_server.load("fonts/ComicMono.ttf");
     commands.spawn(DialogueBundle::new(constants, font));
 }

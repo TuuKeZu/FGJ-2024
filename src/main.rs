@@ -10,26 +10,24 @@ use bevy_egui::EguiPlugin;
 use bevy_inspector_egui::{quick::ResourceInspectorPlugin, DefaultInspectorConfigPlugin};
 use bevy_rapier2d::prelude::*;
 use constants::Constants;
+use dialogues::{handle_dialogue_ui, setup_dialogues, DialogueState};
 use parallax::{ParallaxHeight, ParallaxPlugin};
-use dialogues::{DialogueState, handle_dialogue_ui, setup_dialogues};
 
 mod components;
 mod constants;
+mod dialogues;
 mod parallax;
 mod systems;
 mod tilemap;
 mod ui;
-mod dialogues;
 
 use dialogues::Dialogue;
-
 
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 enum AppState {
     #[default]
     Loading,
 }
-
 
 fn main() {
     let plugins = (
@@ -49,9 +47,15 @@ fn main() {
         move_car,
         show_fps,
         camera_follow,
-        handle_dialogue_ui
+        handle_dialogue_ui,
     );
-    let startup = (setup_graphics, setup_tilemap, setup_physics, setup_dialogues, setup_ui.after(setup_dialogues));
+    let startup = (
+        setup_graphics,
+        setup_tilemap,
+        setup_physics,
+        setup_dialogues,
+        setup_ui.after(setup_dialogues),
+    );
 
     App::new()
         .add_state::<AppState>()

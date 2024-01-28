@@ -82,7 +82,7 @@ impl TileBundle {
 }
 
 fn try_spawn_pavement(
-    cb: &mut ChildBuilder<'_, '_, '_>,
+    cb: &mut ChildBuilder,
     tile: &Tile,
     tr: impl Fn(Transform) -> Transform,
 ) -> Result<(), ()> {
@@ -128,7 +128,7 @@ fn try_spawn_pavement(
     }
 }
 
-fn spawn_pieces(cb: &mut ChildBuilder<'_, '_, '_>, tile: &Tile) {
+fn spawn_pieces(cb: &mut ChildBuilder, tile: &Tile) {
     match tile.tp {
         TileType::Road => {
             for rot_count in 0..4 {

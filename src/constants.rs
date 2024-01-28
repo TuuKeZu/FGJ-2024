@@ -97,7 +97,7 @@ pub struct UiConstants {
 impl Default for UiConstants {
     fn default() -> Self {
         Self {
-            font_size: 50.,
+            font_size: 75.,
             fps_text_padding: 20.,
             font_color: Color::rgb(255., 255., 255.),
         }

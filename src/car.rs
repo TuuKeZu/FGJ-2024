@@ -213,6 +213,10 @@ pub fn car_control(
 
                 transform.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), steering);
                 joint.data.set_motor(JointAxis::AngX, steering, 0., 10., 1.);
+                joint.data.set_limits(
+                    JointAxis::AngX,
+                    [-constants.car.max_steer, constants.car.max_steer],
+                );
             }
         }
     }

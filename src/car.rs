@@ -180,7 +180,7 @@ pub fn tire_friction(
                 .xy();
             // TODO: The constant 0.25 depends on the car having 4 tires. If more are needed, this needs to be changed to actually count the number of tires.
             tire.force.x +=
-                -1. * time.delta_seconds() * local_velocity.x / (0.25 * car_mass.mass + mass.mass);
+                -1. * local_velocity.x * (0.25 * car_mass.mass + mass.mass) / time.delta_seconds();
         }
     }
 }

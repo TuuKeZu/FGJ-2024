@@ -16,15 +16,15 @@ struct AtlasDesc {
     #[serde(default = "one_usize")]
     rows: usize,
     #[serde(default = "parallax_default")]
-    parallax: Vec<Option<usize>>,
+    parallax: Vec<i32>,
     #[serde(default = "parallax_z_default")]
     parallax_z: f32,
     #[serde(default)]
     parallax_invert: bool,
 }
 
-fn parallax_default() -> Vec<Option<usize>> {
-    vec![Some(0)]
+fn parallax_default() -> Vec<i32> {
+    vec![0]
 }
 
 fn one_usize() -> usize {
@@ -69,10 +69,11 @@ pub fn setup_atlases(
                 .into_iter()
                 .enumerate()
                 .filter_map(|(i, l)| {
-                    l.map(|l| {
-                        let index = if v.parallax_invert { total - l - 1 } else { l };
-                        (index, i as f32 * v.parallax_z)
-                    })
+                    let Ok(l) = l.try_into() else {
+                        return None;
+                    };
+                    let index = if v.parallax_invert { total - l - 1 } else { l };
+                    Some((index, i as f32 * v.parallax_z))
                 })
                 .collect();
             let info = AtlasInfo {

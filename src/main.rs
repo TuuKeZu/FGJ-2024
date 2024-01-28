@@ -39,7 +39,6 @@ mod ui;
 mod utility;
 
 use pointer::handle_pointer;
-use pointer::setup_pointer;
 use trigger::{handle_trigger_collisions, setup_trigger};
 
 pub fn window_primary() -> Window {
@@ -91,7 +90,6 @@ fn main() {
         setup_buildings,
         setup_dialogues,
         setup_missions.after(setup_physics),
-        setup_pointer,
         setup_ui.after(setup_dialogues),
     );
 
@@ -112,5 +110,6 @@ fn main() {
         .add_systems(Startup, startup)
         .add_systems(FixedUpdate, tire_friction)
         .add_systems(FixedUpdate, update_tire_forces.after(tire_friction))
+        .add_systems(PostUpdate, handle_pointer)
         .run();
 }

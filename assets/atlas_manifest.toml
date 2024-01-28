@@ -61,3 +61,11 @@ parallax = [
 ]
 parallax_z = 0.5
 parallax_invert = true
+
+[arrow]
+path = "arrow/arrow.png"
+size = [32, 32]
+columns = 1
+rows = 2
+parallax = [0, 1]
+parallax_z = 1.6

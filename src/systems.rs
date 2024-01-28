@@ -1,19 +1,23 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::{buildings::*, car::*, constants::Constants};
+use crate::{buildings::*, car::*, constants::Constants, pointer::PointerBundle};
 
 pub fn setup_graphics(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-pub fn setup_physics(mut commands: Commands, _constants: Res<Constants>) {
-    CarBundle::spawn(&mut commands)
+pub fn setup_physics(mut commands: Commands) {
+    let car = CarBundle::spawn(&mut commands)
         .with_player()
-        .at(Vec2::new(200., 200.));
+        .at(Vec2::new(200., 200.))
+        .id();
+    commands.entity(car).with_children(|parent| {
+        parent.spawn(PointerBundle::new());
+    });
 }
 
-pub fn setup_buildings(mut commands: Commands, _constants: Res<Constants>) {
+pub fn setup_buildings(mut commands: Commands) {
     BuildingBundle::spawn(&mut commands);
 }
 

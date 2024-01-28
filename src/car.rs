@@ -138,6 +138,10 @@ impl CarHandle<'_, '_, '_> {
         commands.entity(car).insert(Player);
         CarHandle(commands, car)
     }
+
+    pub fn id(self) -> Entity {
+        self.1
+    }
 }
 
 #[derive(Bundle, Default)]

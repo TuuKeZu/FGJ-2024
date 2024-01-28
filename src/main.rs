@@ -27,6 +27,7 @@ mod constants;
 mod dialogues;
 mod missions;
 mod parallax;
+mod pointer;
 mod road;
 mod systems;
 mod tilemap;
@@ -34,6 +35,8 @@ mod trigger;
 mod ui;
 mod utility;
 
+use pointer::handle_pointer;
+use pointer::setup_pointer;
 use trigger::{handle_trigger_collisions, setup_trigger};
 
 fn main() {
@@ -69,6 +72,7 @@ fn main() {
         handle_trigger_collisions,
         car_control,
         update_dialogue,
+        handle_pointer,
     );
     let startup = (
         setup_atlases,
@@ -78,7 +82,8 @@ fn main() {
         setup_physics,
         setup_buildings,
         setup_dialogues,
-        setup_missions,
+        setup_missions.after(setup_physics),
+        setup_pointer,
         setup_ui.after(setup_dialogues),
     );
 

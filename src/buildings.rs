@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::{
-    constants::Constants,
-    parallax::{ParallaxImages, ParallaxSprite},
-};
+use crate::parallax::{ParallaxImages, ParallaxSprite};
 
 // TODO correct scaling
 const BUILDING_SCALE: f32 = 6.0;

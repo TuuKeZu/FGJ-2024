@@ -2,10 +2,21 @@ use bevy::prelude::*;
 
 use crate::{
     constants::Constants,
-    trigger::{TriggerBundle, TriggerType},
+    trigger::{Target, TriggerBundle, TriggerType},
 };
 
-pub const MISSION_TARGETS: [Vec2; 2] = [Vec2::new(200., 200.), Vec2::new(-200., -200.)];
+pub const MISSION_TARGETS: [Vec2; 10] = [
+    Vec2::new(500., 500.),
+    Vec2::new(-500., -500.),
+    Vec2::new(500., 500.),
+    Vec2::new(-500., -500.),
+    Vec2::new(500., 500.),
+    Vec2::new(-500., -500.),
+    Vec2::new(500., 500.),
+    Vec2::new(-500., -500.),
+    Vec2::new(500., 500.),
+    Vec2::new(-500., -500.),
+];
 
 #[derive(Debug, Resource)]
 pub struct MissionState {
@@ -25,7 +36,7 @@ impl Default for MissionState {
 }
 
 impl MissionState {
-    pub fn spawn_current_target(&self, mut commands: Commands, constants: Res<Constants>) {
+    pub fn spawn_current_target(&self, commands: &mut Commands, constants: &Res<Constants>) {
         let trigger_type: TriggerType = if self.mission_active {
             TriggerType::StopMission
         } else {
@@ -34,20 +45,28 @@ impl MissionState {
 
         commands
             .spawn(TriggerBundle::new(trigger_type, &constants))
+            .insert(Target {})
             .insert(Transform {
                 translation: self.current_target.unwrap().extend(0.),
                 ..Default::default()
             });
     }
 
-    // pub fn next_target(&mut self) {}
+    pub fn next_target(&mut self, commands: &mut Commands, constants: &Res<Constants>) {
+        let idx = self.target_idx.unwrap();
+        self.target_idx = Some(idx + 1);
+        self.mission_active = !self.mission_active;
+        self.current_target = Some(MISSION_TARGETS[idx + 1]);
+
+        self.spawn_current_target(commands, constants);
+    }
 }
 
 pub fn setup_missions(
-    commands: Commands,
+    mut commands: Commands,
     // asset_server: Res<AssetServer>,
     constants: Res<Constants>,
     state: Res<MissionState>,
 ) {
-    state.spawn_current_target(commands, constants);
+    state.spawn_current_target(&mut commands, &constants);
 }

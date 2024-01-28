@@ -1,10 +1,13 @@
 use bevy::prelude::*;
 use bevy_rapier2d::{prelude::*, rapier::geometry::CollisionEventFlags};
 
-use crate::constants::Constants;
+use crate::{constants::Constants, missions::MissionState};
 
 #[derive(Component)]
 pub struct Trigger {}
+
+#[derive(Component)]
+pub struct Target {}
 
 #[derive(Debug, Clone, Copy, Component)]
 pub enum TriggerType {
@@ -69,26 +72,44 @@ pub fn handle_trigger_collisions(
     mut commands: Commands,
     // mut car_q: Query<&mut CarState, (With<Car>, With<Player>)>,
     mut collision_events: EventReader<CollisionEvent>,
+    mut mission_state: ResMut<MissionState>,
     spawn_q: Query<(Entity, &TriggerType), With<Trigger>>,
+    constants: Res<Constants>,
 ) {
     // let mut car_state = car_q.get_single_mut().unwrap();
 
     for event in collision_events.read() {
         match event {
-            CollisionEvent::Started(sensor, _car, flags) => {
+            CollisionEvent::Started(c1, c2, flags) => {
                 if flags != &CollisionEventFlags::SENSOR {
                     return;
                 }
 
-                if let Some(trigger_type) = spawn_q
+                let a = spawn_q
                     .iter()
-                    .find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id())
-                    .map(|(_e, t)| t)
-                {
-                    dbg!(trigger_type);
+                    .find(|(e, _)| commands.entity(*e).id() == commands.entity(*c1).id());
+                let b = spawn_q
+                    .iter()
+                    .find(|(e, _)| commands.entity(*e).id() == commands.entity(*c2).id());
+
+                let sensor = if a.is_some() {
+                    a
+                } else if b.is_some() {
+                    b
+                } else {
+                    None
+                };
+
+                if let Some(trigger_type) = sensor.map(|(_, t)| t) {
                     match trigger_type {
-                        TriggerType::StartMission => {}
-                        TriggerType::StopMission => {}
+                        TriggerType::StartMission => {
+                            commands.entity(sensor.unwrap().0).despawn();
+                            mission_state.next_target(&mut commands, &constants);
+                        }
+                        TriggerType::StopMission => {
+                            commands.entity(sensor.unwrap().0).despawn();
+                            mission_state.next_target(&mut commands, &constants);
+                        }
                     }
                 }
             }

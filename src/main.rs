@@ -2,6 +2,7 @@ use crate::appstate::*;
 use crate::systems::*;
 use crate::tilemap::setup_tilemap;
 use crate::ui::*;
+use atlas_loader::setup_atlases;
 use bevy::{
     asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
     input::common_conditions::input_toggle_active, prelude::*,
@@ -19,6 +20,7 @@ use missions::MissionState;
 use parallax::{ParallaxHeight, ParallaxPlugin};
 
 mod appstate;
+mod atlas_loader;
 mod buildings;
 mod car;
 mod constants;
@@ -69,6 +71,7 @@ fn main() {
         update_dialogue,
     );
     let startup = (
+        setup_atlases,
         setup_graphics,
         setup_tilemap,
         setup_trigger,

@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     constants::TILE_SIZE,
-    road::{Road, RoadBundle, RoadTexture},
+    road::{Road, RoadBundle},
 };
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]
@@ -87,48 +87,36 @@ fn try_spawn_pavement(
     match tile.neighbors.as_array() {
         [true, true, true, true] => {
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::PavementCross,
-                },
+                Road::new("pavement_cross"),
                 tr(Transform::default()),
             ));
             Ok(())
         }
         [false, true, true, true] => {
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::PavementT,
-                },
+                Road::new("pavement_t"),
                 tr(Transform::default()),
             ));
             Ok(())
         }
         [_, false, true, false] => {
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::Pavement,
-                },
+                Road::new("pavement"),
                 tr(Transform::from_xyz(0., -TILE_SIZE / 3., 0.)),
             ));
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::Pavement,
-                },
+                Road::new("pavement"),
                 tr(Transform::from_xyz(0., 0., 0.)),
             ));
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::Pavement,
-                },
+                Road::new("pavement"),
                 tr(Transform::from_xyz(0., TILE_SIZE / 3., 0.)),
             ));
             Ok(())
         }
         [false, true, true, false] => {
             cb.spawn(RoadBundle::new(
-                Road {
-                    texture: RoadTexture::PavementTurn,
-                },
+                Road::new("pavement_turn"),
                 tr(Transform::default()),
             ));
             Ok(())

@@ -35,22 +35,11 @@ impl CarBundle {
             ..Default::default()
         };
 
-        // TODO helper for for this
-        let indices_heights_sprites = (0..4)
-            .map(|index| (3 - index, index as f32 + 0.5, sprite.clone()))
-            .collect::<Vec<_>>();
-
         let car = CarBundle {
             car: Car {},
             state: CarState { passenger: false },
             sprite: ParallaxSprite {
-                images: ParallaxImages::new(
-                    "car/car.png",
-                    indices_heights_sprites,
-                    Vec2::new(64., 64.),
-                    1,
-                    4,
-                ),
+                images: ParallaxImages::new("car", sprite),
                 visibility: VisibilityBundle::default(),
                 transform: TransformBundle::default(),
             },

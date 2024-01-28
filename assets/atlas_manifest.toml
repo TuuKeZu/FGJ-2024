@@ -1,0 +1,48 @@
+[car]
+path = "car/car.png"
+size = [64.0, 64.0]
+columns = 1
+rows = 4
+parallax = [3, 2, 1, 0]
+parallax_z = 0.5
+
+[pavement]
+path = "pavement/pavement.png"
+size = [64.0, 64.0]
+
+[pavement_turn]
+path = "pavement_turn/pavement_turn.png"
+size = [192.0, 192.0]
+
+[pavement_t]
+path = "pavement_t/pavement_t.png"
+size = [64.0, 64.0]
+
+[pavement_cross]
+path = "pavement_cross/pavement_cross.png"
+size = [64.0, 64.0]
+
+[building1]
+path = "building1/building1_atlas.png"
+size = [64.0, 8.0]
+columns = 1
+rows = 8
+parallax = [0, 1, 2, 3, 4, 5, 6, 7]
+parallax_z = 0.5
+
+[building2]
+path = "building2/building2.png"
+size = [192.0, 16.0]
+columns = 1
+rows = 12
+parallax = [
+    # Increasing bottom to top
+    0, 1, 1, # Ground level
+    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, # Windows
+    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, # Windows
+    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, # Windows
+    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, # Windows
+    6, 6, 7, 7, 8, 9, 9, 9, 9, 10, 10, 9, 9, 11, 11, 11,
+]
+parallax_z = 0.1
+parallax_invert = true

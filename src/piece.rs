@@ -45,14 +45,14 @@ impl PieceMeta {
     }
 }
 
-pub fn spawn_as_child(cb: &mut ChildBuilder, piece: Piece, meta: PieceMeta) {
+pub fn spawn_as_child(cb: &mut ChildBuilder, (piece, meta): (Piece, PieceMeta)) {
     let mut f = cb.spawn(PieceBundle::new(piece, meta.transform, meta.anchor));
     if let Some(collider) = meta.collider {
         f.insert(collider);
     }
 }
 
-pub fn spawn(commands: &mut Commands, piece: Piece, meta: PieceMeta) {
+pub fn spawn(commands: &mut Commands, (piece, meta): (Piece, PieceMeta)) {
     let mut f = commands.spawn(PieceBundle::new(piece, meta.transform, meta.anchor));
     if let Some(collider) = meta.collider {
         f.insert(collider);

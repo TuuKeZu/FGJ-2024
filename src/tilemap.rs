@@ -112,11 +112,13 @@ fn try_spawn_pavement(
                 for dx in [-TILE_SIZE / 3., TILE_SIZE / 3.] {
                     spawn_as_child(
                         cb,
-                        Piece::new("sidewalk"),
-                        PieceMeta::new(
-                            tr(Transform::from_xyz(dx, dy, 0.5)),
-                            Some(Collider::cuboid(10., 10.)),
-                            None,
+                        (
+                            Piece::new("sidewalk"),
+                            PieceMeta::new(
+                                tr(Transform::from_xyz(dx, dy, 0.5)),
+                                Some(Collider::cuboid(10., 10.)),
+                                None,
+                            ),
                         ),
                     );
                 }
@@ -126,8 +128,10 @@ fn try_spawn_pavement(
         [false, true, true, false] => {
             spawn_as_child(
                 cb,
-                Piece::new("pavement_turn"),
-                PieceMeta::new(tr(Transform::default()), None, None),
+                (
+                    Piece::new("pavement_turn"),
+                    PieceMeta::new(tr(Transform::default()), None, None),
+                ),
             );
             Ok(())
         }

@@ -42,7 +42,7 @@ pub struct CameraConstants {
 impl Default for CameraConstants {
     fn default() -> Self {
         Self {
-            height: 10.,
+            height: 50.,
             height_speed_factor: 1.,
             lookahead: 1.,
             easing_speed: 2.,

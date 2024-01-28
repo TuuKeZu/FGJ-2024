@@ -7,7 +7,12 @@ use crate::{
 };
 
 #[derive(Component)]
+pub struct Player;
+
+#[derive(Component)]
 pub struct Car {}
+
+pub struct CarHandle<'c, 'w, 's>(&'c mut Commands<'w, 's>, Entity);
 
 #[derive(Component)]
 pub struct CarState {
@@ -23,7 +28,10 @@ pub struct CarBundle {
 }
 
 impl CarBundle {
-    pub fn spawn(commands: &mut Commands, constants: Res<Constants>) {
+    pub fn spawn<'c, 'w, 's>(
+        commands: &'c mut Commands<'w, 's>,
+        constants: Res<Constants>,
+    ) -> CarHandle<'c, 'w, 's> {
         let sprite = Sprite {
             custom_size: Some(Vec2::new(
                 2. * constants.car.size.x,
@@ -121,6 +129,20 @@ impl CarBundle {
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
         });
+
+        CarHandle(commands, car)
+    }
+}
+
+impl CarHandle<'_, '_, '_> {
+    pub fn at(self, pos: Vec2) -> Self {
+        let CarHandle(commands, car) = self;
+        commands.entity(car).insert(Transform {
+            translation: Vec3::new(pos.x, pos.y, 0.),
+            rotation: Quat::IDENTITY,
+            scale: Vec3::new(1., 1., 1.),
+        });
+        CarHandle(commands, car)
     }
 }
 

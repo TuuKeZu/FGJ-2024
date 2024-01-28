@@ -12,7 +12,7 @@ pub fn setup_graphics(mut commands: Commands) {
 }
 
 pub fn setup_physics(mut commands: Commands, constants: Res<Constants>) {
-    CarBundle::spawn(&mut commands, constants);
+    CarBundle::spawn(&mut commands, constants).at(Vec2::new(200., 5.));
 }
 
 pub fn setup_buildings(mut commands: Commands, constants: Res<Constants>) {

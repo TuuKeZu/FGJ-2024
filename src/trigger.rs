@@ -1,19 +1,7 @@
-use bevy::{
-    ecs::{
-        archetype::Archetypes,
-        component::{ComponentId, Components},
-    },
-    prelude::*,
-    transform::commands,
-};
+use bevy::prelude::*;
 use bevy_rapier2d::{prelude::*, rapier::geometry::CollisionEventFlags};
 
-use crate::{
-    car::{Car, CarState},
-    constants::Constants,
-    parallax::ParallaxSprite,
-    utility::get_components_for_entity,
-};
+use crate::constants::Constants;
 
 #[derive(Component)]
 pub struct Trigger {}
@@ -35,7 +23,7 @@ pub struct TriggerBundle {
 }
 
 impl TriggerBundle {
-    pub fn new(trigger_type: TriggerType, constants: &Res<Constants>) -> Self {
+    pub fn new(_trigger_type: TriggerType, constants: &Res<Constants>) -> Self {
         Self {
             trigger: Trigger {},
             trigger_type: TriggerType::StartMission,
@@ -62,7 +50,9 @@ impl TriggerBundle {
     }
 }
 
-pub fn setup_trigger(mut commands: Commands, constants: Res<Constants>) {
+pub fn setup_trigger(commands: Commands, constants: Res<Constants>) {
+    let _ = commands;
+    let _ = constants;
     /*
     commands.spawn(TriggerBundle::new(&constants));
     commands
@@ -77,15 +67,15 @@ pub fn setup_trigger(mut commands: Commands, constants: Res<Constants>) {
 
 pub fn handle_trigger_collisions(
     mut commands: Commands,
-    mut car_q: Query<&mut CarState, With<Car>>,
+    // mut car_q: Query<&mut CarState, (With<Car>, With<Player>)>,
     mut collision_events: EventReader<CollisionEvent>,
     spawn_q: Query<(Entity, &TriggerType), With<Trigger>>,
 ) {
-    let mut car_state = car_q.get_single_mut().unwrap();
+    // let mut car_state = car_q.get_single_mut().unwrap();
 
     for event in collision_events.read() {
         match event {
-            CollisionEvent::Started(sensor, car, flags) => {
+            CollisionEvent::Started(sensor, _car, flags) => {
                 if flags != &CollisionEventFlags::SENSOR {
                     return;
                 }
@@ -93,7 +83,7 @@ pub fn handle_trigger_collisions(
                 if let Some(trigger_type) = spawn_q
                     .iter()
                     .find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id())
-                    .map(|(e, t)| t)
+                    .map(|(_e, t)| t)
                 {
                     dbg!(trigger_type);
                     match trigger_type {
@@ -110,7 +100,7 @@ pub fn handle_trigger_collisions(
                 if let Some(trigger_type) = spawn_q
                     .iter()
                     .find(|(e, _)| commands.entity(*e).id() == commands.entity(*sensor).id())
-                    .map(|(e, t)| t)
+                    .map(|(_e, t)| t)
                 {
                     match trigger_type {
                         TriggerType::StartMission => {}

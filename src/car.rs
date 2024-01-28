@@ -201,7 +201,7 @@ pub fn car_control(
     keyboard_input: Res<Input<KeyCode>>,
     constants: Res<Constants>,
     cars: Query<(&Velocity, &GlobalTransform, &Children), (With<Player>, Without<Tire>)>,
-    mut tires: Query<(&mut Tire, &mut Transform, &mut ImpulseJoint), (With<Steering>)>,
+    mut tires: Query<(&mut Tire, &mut Transform, &mut ImpulseJoint), With<Steering>>,
 ) {
     for (velocity, car_transform, car_tires) in cars.iter() {
         // Compute car velocity

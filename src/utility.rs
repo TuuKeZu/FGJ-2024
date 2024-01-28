@@ -1,10 +1,9 @@
 use bevy::{
     ecs::{archetype::Archetypes, component::ComponentId},
     prelude::*,
-    transform::commands,
 };
-use bevy_rapier2d::{prelude::*, rapier::geometry::CollisionEventFlags};
 
+#[allow(unused)]
 pub fn get_components_for_entity<'a>(
     entity: &Entity,
     archetypes: &'a Archetypes,

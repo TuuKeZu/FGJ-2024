@@ -40,12 +40,12 @@ impl MissionState {
             });
     }
 
-    pub fn next_target(&mut self) {}
+    // pub fn next_target(&mut self) {}
 }
 
 pub fn setup_missions(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
+    commands: Commands,
+    // asset_server: Res<AssetServer>,
     constants: Res<Constants>,
     state: Res<MissionState>,
 ) {

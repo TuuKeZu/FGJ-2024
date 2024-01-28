@@ -12,7 +12,9 @@ pub fn setup_graphics(mut commands: Commands) {
 }
 
 pub fn setup_physics(mut commands: Commands, constants: Res<Constants>) {
-    CarBundle::spawn(&mut commands, constants).at(Vec2::new(200., 5.));
+    CarBundle::spawn(&mut commands, constants)
+        .with_player()
+        .at(Vec2::new(200., 5.));
 }
 
 pub fn setup_buildings(mut commands: Commands, constants: Res<Constants>) {
@@ -20,11 +22,8 @@ pub fn setup_buildings(mut commands: Commands, constants: Res<Constants>) {
 }
 
 pub fn camera_follow(
-    car_q: Query<&Transform, With<Car>>,
+    car_q: Query<&Transform, (With<Car>, With<Player>)>,
     mut camera_q: Query<&mut Transform, (With<Camera2d>, Without<Car>)>,
-    mut dialogue_state: ResMut<DialogueState>,
-    dialogues: ResMut<Assets<DialogueList>>,
-    dialogue: Res<DialogueHandle>,
 ) {
     let car_transform = car_q.get_single().unwrap();
     let mut camera_transform = camera_q.get_single_mut().unwrap();
@@ -32,7 +31,13 @@ pub fn camera_follow(
     // TODO add easing
     camera_transform.translation.x = car_transform.translation.x;
     camera_transform.translation.y = car_transform.translation.y;
+}
 
+pub fn update_dialogue(
+    mut dialogue_state: ResMut<DialogueState>,
+    dialogues: ResMut<Assets<DialogueList>>,
+    dialogue: Res<DialogueHandle>,
+) {
     if !dialogue_state.active {
         dialogue_state.load_dialogue("p1", dialogues, dialogue);
     }

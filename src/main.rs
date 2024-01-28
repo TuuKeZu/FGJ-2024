@@ -66,6 +66,7 @@ fn main() {
         handle_dialogue_ui,
         handle_trigger_collisions,
         car_control,
+        update_dialogue,
     );
     let startup = (
         setup_graphics,

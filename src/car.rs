@@ -144,6 +144,12 @@ impl CarHandle<'_, '_, '_> {
         });
         CarHandle(commands, car)
     }
+
+    pub fn with_player(self) -> Self {
+        let CarHandle(commands, car) = self;
+        commands.entity(car).insert(Player);
+        CarHandle(commands, car)
+    }
 }
 
 #[derive(Bundle, Default)]
@@ -194,7 +200,7 @@ pub fn tire_friction(
 pub fn car_control(
     keyboard_input: Res<Input<KeyCode>>,
     constants: Res<Constants>,
-    cars: Query<(&Velocity, &GlobalTransform, &Children), Without<Tire>>,
+    cars: Query<(&Velocity, &GlobalTransform, &Children), (With<Player>, Without<Tire>)>,
     mut tires: Query<(&mut Tire, &mut Transform, &mut ImpulseJoint), (With<Steering>)>,
 ) {
     for (velocity, car_transform, car_tires) in cars.iter() {

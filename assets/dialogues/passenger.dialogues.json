@@ -1,12 +1,23 @@
 [
     {
+        "name": "p-end",
+        "list": [
+            {
+                "character": "Passenger",
+                "list": [
+                    "Thanks!"
+                ]
+            }
+        ]
+    },
+    {
         "name": "p1",
         "list": [
             {
                 "character": "Passenger",
                 "list": [
                     "Hey",
-                    "Can you drive me to crematoriun"
+                    "Can you drive me to the crematoriun?"
                 ]
             },
             {
@@ -18,7 +29,7 @@
             {
                 "character": "Passenger",
                 "list": [
-                    "I have to pickup my grandma"
+                    "I have to pick up my grandma"
                 ]
             },
             {
@@ -54,7 +65,8 @@
             {
                 "character": "Driver",
                 "list": [
-                    "Yea me too... Being a Tango driver makes the living but not much else..."
+                    "Yea me too...",
+                    "Being a Tango Driver makes the living but not much else..."
                 ]
             },
             {
@@ -69,37 +81,309 @@
         "name": "p3",
         "list": [
             {
-                "character": "Passenger",
-                "list": [
-                    "Can you take me to the airport!? My flight leaves in an hour!",
-                    "Be fast!!!"
-                ]
-            },
-            {
                 "character": "Driver",
                 "list": [
-                    "Yea sure!",
-                    "Wrumm"
-                ]
-            },
-            {
-                "character": "Driver",
-                "list": [
-                    "Why did you leave so late?"
+                    "Hello.",
+                    "Where are we going?"
                 ]
             },
             {
                 "character": "Passenger",
                 "list": [
-                    "Well I thought I had time so I took a shit.",
-                    "But I was so tired I fell asleep on the toilet and slept for like an hour!",
-                    "But all is well if you just take me to the airport in time"
+                    "Home."
                 ]
             },
             {
                 "character": "Driver",
                 "list": [
-                    "Sure thing!"
+                    "...",
+                    "Where's that?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "I don't know."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "You don't know where you live?"
+                ]
+    
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "No."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "How am I supposed to get you home then?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list":[
+                    "I don't know."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "..."
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "..."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "..."
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "...",
+                    "I like trains."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "I'll take you to the train station, then."
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Okay.",
+                    "That's where I live, by the way."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p4",
+        "list": [
+            {
+                "character": "Driver",
+                "list": [
+                    "Where would you like to go?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Do you know the way?"
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "To where?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Do you know the way of the devil?"
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "The what!?",
+                    "What are you talking about?",
+                    "I guess I'll just take you to the church."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p5",
+        "list": [
+            {
+                "character": "Passenger",
+                "list": [
+                    "I need to get to the hotel."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Alright."
+                ]
+    
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "My house burned down."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Oh, I'm sorry to hear that."
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "This is fine."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p6",
+        "list": [
+            {
+                "character": "Passenger",
+                "list": [
+                    "I need to get to the vet."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Okay.",
+                    "What's wrong with your pet?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "It's not my pet.",
+                    "It's my wife."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "...",
+                    "What do you mean?"
+                ]
+    
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "She's a veternarian."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Oh, okay.",
+                    "That makes sense."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p7",
+        "list": [
+            {
+                "character": "Driver",
+                "list": [
+                    "Where are we going?",
+                    "And what's moving inside the bag?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "I'm going to the mall to buy some shoes.",
+                    "For my pet snake.",
+                    "He's in the bag."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Why would you buy shoes for a snake?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "He's a snakerhead."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p8",
+        "list": [
+            {
+                "character": "Driver",
+                "list": [
+                    "Where do you wish to go?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Where can I buy a high-vis vest?",
+                    "For a snake."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "I'm not sure.",
+                    "I don't think I've ever seen a snake wearing a high-vis vest.",
+                    "You could ask at the pet store if they have any."
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "Okay, that works. Let's go there.",
+                    "Now I can walk my snake at night safely.",
+                    "No step on snek."
+                ]
+            }
+        ]
+    },
+    {
+        "name": "p9",
+        "list": [
+            {
+                "character": "Driver",
+                "list": [
+                    "Where are we going?",
+                    "And what's moving inside the bag?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "I'm going to the mall to buy some shoes.",
+                    "For my pet snake.",
+                    "He's in the bag."
+                ]
+            },
+            {
+                "character": "Driver",
+                "list": [
+                    "Why would you buy shoes for a snake?"
+                ]
+            },
+            {
+                "character": "Passenger",
+                "list": [
+                    "He's a snakerhead."
                 ]
             }
         ]

@@ -11,7 +11,6 @@ pub const TILE_SIZE: f32 = 400.;
 pub struct Constants {
     pub ui: UiConstants,
     pub car: CarConstants,
-    pub building: BuildingConstants,
     pub camera: CameraConstants,
     pub trigger: TriggerConstants,
 }
@@ -19,17 +18,11 @@ pub struct Constants {
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct CarConstants {
-    pub scale: f32,
     pub acceleration: f32,
     pub breaking_force: f32,
     pub max_speed: f32,
     pub max_backing_speed: f32,
     pub max_steer: f32,
-}
-#[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
-#[reflect(InspectorOptions)]
-pub struct BuildingConstants {
-    pub scale: f32,
 }
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
@@ -71,24 +64,18 @@ impl Default for TriggerConstants {
     }
 }
 
-pub const CAR_COLLIDER_SIZE_PX: Vec2 = Vec2::new(14., 38.);
+pub const CAR_COLLIDER_SIZE_PX: Vec2 = Vec2::new(3. * 14., 3. * 38.);
+pub const CAR_SPRITE_SCALE: f32 = 6.0;
 
 impl Default for CarConstants {
     fn default() -> Self {
         Self {
-            scale: 3.0,
             max_speed: 5000.,
             max_backing_speed: 200.,
             acceleration: 70.,
             max_steer: std::f32::consts::PI / 6.0,
             breaking_force: 150.,
         }
-    }
-}
-
-impl Default for BuildingConstants {
-    fn default() -> Self {
-        Self { scale: 2.0 }
     }
 }
 

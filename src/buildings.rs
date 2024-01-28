@@ -6,19 +6,19 @@ use crate::{
     parallax::{ParallaxImages, ParallaxSprite},
 };
 
+// TODO correct scaling
+const BUILDING_SCALE: f32 = 6.0;
+
 #[derive(Component)]
 pub enum Building {
     Building1,
 }
 
 impl Building {
-    fn get_parallax_images(&self, constants: Constants) -> ParallaxImages {
+    fn get_parallax_images(&self, _constants: Constants) -> ParallaxImages {
         use Building::*;
         let sprite = Sprite {
-            custom_size: Some(Vec2::new(
-                192. * constants.building.scale, // TODO fix scaling
-                16. * constants.building.scale,
-            )),
+            custom_size: Some(Vec2::new(192. * BUILDING_SCALE, 16. * BUILDING_SCALE)),
             ..Default::default()
         };
         match *self {
@@ -37,7 +37,13 @@ impl Building {
                 let indices_heights_sprites = indices
                     .into_iter()
                     .enumerate()
-                    .map(|(n, index)| (11 - index, n as f32 * 0.25 + 0.5, sprite.clone()))
+                    .map(|(n, index)| {
+                        (
+                            11 - index,
+                            n as f32 * 0.1 * BUILDING_SCALE + 0.5,
+                            sprite.clone(),
+                        )
+                    })
                     .collect::<Vec<_>>();
                 ParallaxImages::new(
                     "building2/building2.png",
@@ -73,8 +79,8 @@ impl BuildingBundle {
             .spawn(building)
             .insert(RigidBody::Fixed)
             .insert(Collider::cuboid(
-                192.0 / 2.0 * constants.building.scale,
-                4.0 / 2.0 * constants.building.scale,
+                192.0 / 2.0 * BUILDING_SCALE,
+                4.0 / 2.0 * BUILDING_SCALE,
             ));
     }
 }

@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::constants::CAR_COLLIDER_SIZE_PX;
+use crate::constants::{CAR_COLLIDER_SIZE_PX, CAR_SPRITE_SCALE};
 use crate::{
     constants::Constants,
     parallax::{ParallaxImages, ParallaxSprite},
@@ -34,7 +34,7 @@ impl CarBundle {
         constants: &Constants,
     ) -> CarHandle<'c, 'w, 's> {
         let sprite = Sprite {
-            custom_size: Some(Vec2::new(constants.car.scale, constants.car.scale)),
+            custom_size: Some(CAR_SPRITE_SCALE * Vec2::new(64., 64.)), // TODO sprite scaling
             ..Default::default()
         };
 

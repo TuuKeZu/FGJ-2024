@@ -16,11 +16,11 @@ size = [192.0, 192.0]
 
 [pavement_t]
 path = "pavement_t/pavement_t.png"
-size = [64.0, 64.0]
+size = [192.0, 192.0]
 
 [pavement_cross]
 path = "pavement_cross/pavement_cross.png"
-size = [64.0, 64.0]
+size = [192.0, 192.0]
 
 [building1]
 path = "building1/building1_atlas.png"

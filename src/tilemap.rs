@@ -71,7 +71,9 @@ impl TileBundle {
     fn new(tile: Tile) -> Self {
         TileBundle {
             spatial: SpatialBundle {
-                transform: Transform::from_translation((tile.pos * TILE_SIZE).extend(-100.)),
+                transform: dbg!(Transform::from_translation(
+                    (tile.pos * TILE_SIZE).extend(-100.)
+                )),
                 ..Default::default()
             },
             tile,
@@ -100,6 +102,7 @@ fn try_spawn_pavement(
             Ok(())
         }
         [_, false, true, false] => {
+            info!("pystytie {tile:?}");
             cb.spawn(RoadBundle::new(
                 Road::new("pavement"),
                 tr(Transform::from_xyz(0., -TILE_SIZE / 3., 0.)),

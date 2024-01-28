@@ -15,12 +15,16 @@ struct AtlasDesc {
     columns: usize,
     #[serde(default = "one_usize")]
     rows: usize,
-    #[serde(default)]
+    #[serde(default = "parallax_default")]
     parallax: Vec<Option<usize>>,
     #[serde(default = "parallax_z_default")]
     parallax_z: f32,
     #[serde(default)]
     parallax_invert: bool,
+}
+
+fn parallax_default() -> Vec<Option<usize>> {
+    vec![Some(0)]
 }
 
 fn one_usize() -> usize {
@@ -31,6 +35,7 @@ fn parallax_z_default() -> f32 {
 }
 
 pub struct AtlasInfo {
+    pub size: Vec2,
     pub atlas: Handle<TextureAtlas>,
     pub parallax: Vec<(usize, f32)>,
 }
@@ -71,6 +76,7 @@ pub fn setup_atlases(
                 })
                 .collect();
             let info = AtlasInfo {
+                size: v.size,
                 atlas: handle,
                 parallax: layers,
             };

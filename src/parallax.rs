@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::atlas_loader::Atlases;
+use crate::{atlas_loader::Atlases, constants::TILE_PX_PER_UNIT};
 
 pub struct ParallaxPlugin;
 
@@ -63,6 +63,9 @@ pub fn add_layers(
             continue;
         };
         let tah = &atlas_info.atlas;
+        let custom_size = base_sprite
+            .custom_size
+            .unwrap_or(atlas_info.size / TILE_PX_PER_UNIT);
         commands.entity(entity).with_children(|parent| {
             for (index, height) in &atlas_info.parallax {
                 let sprite = TextureAtlasSprite {
@@ -70,7 +73,7 @@ pub fn add_layers(
                     index: *index,
                     flip_x: base_sprite.flip_x,
                     flip_y: base_sprite.flip_y,
-                    custom_size: base_sprite.custom_size,
+                    custom_size: Some(custom_size),
                     anchor: base_sprite.anchor,
                 };
                 parent.spawn(ParallaxLayer {

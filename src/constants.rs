@@ -4,7 +4,9 @@ use bevy::render::color::Color;
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
 use bevy_inspector_egui::InspectorOptions;
 
+// XXX
 pub const TILE_SIZE: f32 = 400.;
+pub const TILE_PX_PER_UNIT: f32 = 192. / TILE_SIZE;
 
 #[derive(Resource, Clone, Copy, Reflect, Default, InspectorOptions)]
 #[reflect(InspectorOptions)]

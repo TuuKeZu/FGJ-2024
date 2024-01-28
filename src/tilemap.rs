@@ -152,16 +152,14 @@ fn try_spawn_pavement(
 }
 
 fn spawn_pieces(cb: &mut ChildBuilder, tile: &Tile) {
+    spawn_as_child(
+        cb,
+        (
+            Piece::new("grass"),
+            PieceMeta::new(Transform::from_xyz(0., 0., -1.), None, None),
+        ),
+    );
     match tile.tp {
-        TileType::Grass => {
-            spawn_as_child(
-                cb,
-                (
-                    Piece::new("grass"),
-                    PieceMeta::new(Transform::default(), None, None),
-                ),
-            );
-        }
         TileType::Road => {
             for rot_count in 0..4 {
                 let rotated_tile = Tile {

@@ -25,6 +25,7 @@ pub struct CarConstants {
     pub max_speed: f32,
     pub max_backing_speed: f32,
     pub max_steer: f32,
+    pub steering_force: f32,
 }
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
@@ -80,6 +81,7 @@ impl Default for CarConstants {
             acceleration: 70.,
             max_steer: std::f32::consts::PI / 6.,
             breaking_force: 200.,
+            steering_force: 20.,
         }
     }
 }

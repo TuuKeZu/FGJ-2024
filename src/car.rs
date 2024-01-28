@@ -193,7 +193,7 @@ pub fn car_control(
     keyboard_input: Res<Input<KeyCode>>,
     constants: Res<Constants>,
     cars: Query<(&Velocity, &GlobalTransform, &Children), (With<Player>, Without<Tire>)>,
-    mut tires: Query<(&mut Tire, &mut Transform, &mut ImpulseJoint), With<Steering>>,
+    mut tires: Query<(&mut Tire, &mut ImpulseJoint), With<Steering>>,
 ) {
     for (velocity, car_transform, car_tires) in cars.iter() {
         // Compute car velocity
@@ -228,11 +228,16 @@ pub fn car_control(
         }
 
         for &t in car_tires {
-            if let Ok((mut tire, mut transform, mut joint)) = tires.get_mut(t) {
+            if let Ok((mut tire, mut joint)) = tires.get_mut(t) {
                 tire.force.y += acceleration_force;
 
-                transform.rotation = Quat::from_axis_angle(Vec3::new(0., 0., 1.), steering);
-                joint.data.set_motor(JointAxis::AngX, steering, 0., 10., 1.);
+                joint.data.set_motor(
+                    JointAxis::AngX,
+                    steering,
+                    0.,
+                    constants.car.steering_force,
+                    1.,
+                );
                 joint.data.set_limits(
                     JointAxis::AngX,
                     [-constants.car.max_steer, constants.car.max_steer],

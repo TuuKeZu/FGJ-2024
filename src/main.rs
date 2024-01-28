@@ -64,7 +64,7 @@ fn main() {
         AppState::splash_screen(),
         FrameTimeDiagnosticsPlugin,
         RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0), //.in_fixed_schedule(),
-        RapierDebugRenderPlugin::default(),
+        // RapierDebugRenderPlugin::default(),
         EguiPlugin,
         DefaultInspectorConfigPlugin,
         ResourceInspectorPlugin::<Constants>::default(),

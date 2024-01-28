@@ -131,11 +131,7 @@ pub fn handle_trigger_collisions(
                             commands.entity(sensor.unwrap().0).despawn();
                             mission_state.next_target(&mut commands, &constants);
 
-                            dialogue_state.load_dialogue(
-                                "p-end",
-                                &mut dialogues,
-                                &dialogue,
-                            );
+                            dialogue_state.load_dialogue("p-end", &mut dialogues, &dialogue);
                         }
                     }
                 }

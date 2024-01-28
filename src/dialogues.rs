@@ -100,7 +100,7 @@ impl DialogueState {
             dbg!(name);
             self.current = dialogue.get(name);
             self.active = true;
-            self.timer = Timer::new(Duration::from_secs(2), TimerMode::Repeating);
+            self.timer = Timer::new(Duration::from_secs(3), TimerMode::Repeating);
         }
     }
 }

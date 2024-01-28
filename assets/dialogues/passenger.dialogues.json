@@ -35,18 +35,6 @@
             {
                 "character": "Passenger",
                 "list": [
-                    "Hei",
-                    "Kannattaa kattoo nopee"
-                ]
-            }
-        ]
-    },
-    {
-        "name": "p3",
-        "list": [
-            {
-                "character": "Passenger",
-                "list": [
                     "Hey",
                     "I need to get to the bank"
                 ]
@@ -78,7 +66,7 @@
         ]
     },
     {
-        "name": "p4",
+        "name": "p3",
         "list": [
             {
                 "character": "Passenger",

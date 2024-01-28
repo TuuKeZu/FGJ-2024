@@ -5,7 +5,13 @@ use crate::{
     trigger::{Target, TriggerBundle, TriggerType},
 };
 
-pub const MISSION_TARGETS: [Vec2; 6] = [
+pub const MISSION_TARGETS: [Vec2; 12] = [
+    Vec2::new(16_000., 12_500.),
+    Vec2::new(22_500., 21_000.),
+    Vec2::new(24_000., 23_400.),
+    Vec2::new(24_300., 18_000.),
+    Vec2::new(19_000., 14_200.),
+    Vec2::new(11_450., 20_600.),
     Vec2::new(16_000., 12_500.),
     Vec2::new(22_500., 21_000.),
     Vec2::new(24_000., 23_400.),

@@ -27,6 +27,7 @@ impl PointerBundle {
                 images: ParallaxImages::new(
                     "arrow",
                     Sprite {
+                        color: Color::rgb(255., 0., 0.),
                         custom_size: Some(1. * Vec2::new(64., 64.)),
                         ..Default::default()
                     },

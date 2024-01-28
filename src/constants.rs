@@ -5,6 +5,7 @@ use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
 use bevy_inspector_egui::InspectorOptions;
 
 pub const TILE_SIZE: f32 = 900.;
+pub const PX_SIZE: f32 = TILE_SIZE / 192.;
 pub const TILE_PX_PER_UNIT: f32 = 192. / TILE_SIZE;
 
 #[derive(Resource, Clone, Copy, Reflect, Default, InspectorOptions)]

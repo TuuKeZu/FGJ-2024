@@ -116,12 +116,25 @@ fn try_spawn_pavement(
                             Piece::new("sidewalk"),
                             PieceMeta::new(
                                 tr(Transform::from_xyz(dx, dy, 0.5)),
-                                Some(Collider::cuboid(10., 10.)),
+                                None,
+                                //Some(Collider::cuboid(10., 10.)),
                                 None,
                             ),
                         ),
                     );
                 }
+            }
+            let parity = ((tile.pos.x + tile.pos.y) as i32).rem_euclid(2);
+            if parity == 0 {
+                spawn_as_child(
+                    cb,
+                    make_lamppost(tr(Transform::from_xyz(TILE_SIZE / 3., 0., 0.))),
+                );
+            }
+            if parity == 1 {
+                let mut t = Transform::from_xyz(-TILE_SIZE / 3., 0., 0.);
+                t.rotate_z(std::f32::consts::PI);
+                spawn_as_child(cb, make_lamppost(tr(t)));
             }
             Ok(())
         }

@@ -4,6 +4,7 @@ use bevy::sprite::Anchor;
 use bevy::{prelude::*, transform::commands};
 use bevy_rapier2d::prelude::*;
 
+use crate::constants::PX_SIZE;
 use crate::{
     parallax::{ParallaxImages, ParallaxSprite},
     // constants::TILE_SIZE,
@@ -43,6 +44,17 @@ impl PieceMeta {
             anchor,
         }
     }
+}
+
+pub fn make_lamppost(t: Transform) -> (Piece, PieceMeta) {
+    (
+        Piece("pole".to_string()),
+        PieceMeta::new(
+            t,
+            Some(Collider::cuboid(2. * PX_SIZE, 2. * PX_SIZE)),
+            Some(Anchor::Custom(Vec2::new(0.27, 0.))),
+        ),
+    )
 }
 
 pub fn spawn_as_child(cb: &mut ChildBuilder, (piece, meta): (Piece, PieceMeta)) {

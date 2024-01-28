@@ -6,6 +6,10 @@ rows = 4
 parallax = [3, 2, 1, 0]
 parallax_z = 0.5
 
+[grass]
+path  = "grass/grass.png"
+size = [192.0, 192.0]
+
 [pavement]
 path = "pavement/pavement.png"
 size = [64.0, 64.0]

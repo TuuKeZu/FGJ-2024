@@ -18,7 +18,7 @@ impl From<i32> for TileType {
     fn from(value: i32) -> Self {
         use TileType::*;
         match value {
-            0 => Empty,
+            0 => Grass,
             1 => Grass,
             2 => Road,
             3 => Building,
@@ -153,6 +153,15 @@ fn try_spawn_pavement(
 
 fn spawn_pieces(cb: &mut ChildBuilder, tile: &Tile) {
     match tile.tp {
+        TileType::Grass => {
+            spawn_as_child(
+                cb,
+                (
+                    Piece::new("grass"),
+                    PieceMeta::new(Transform::default(), None, None),
+                ),
+            );
+        }
         TileType::Road => {
             for rot_count in 0..4 {
                 let rotated_tile = Tile {

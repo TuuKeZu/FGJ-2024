@@ -13,6 +13,9 @@ size = [64.0, 64.0]
 [pavement_turn]
 path = "pavement_turn/pavement_turn.png"
 size = [192.0, 192.0]
+columns = 1
+rows = 2
+parallax = [1]
 
 [pavement_t]
 path = "pavement_t/pavement_t.png"

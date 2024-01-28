@@ -3,7 +3,7 @@ path = "car/car.png"
 size = [64.0, 64.0]
 columns = 1
 rows = 4
-parallax = [3, 2, 1, 0]
+parallax = [-1, -1, 3, 2, 1, 0]
 parallax_z = 0.5
 
 [grass]

@@ -3,7 +3,7 @@ use std::f32::consts::PI;
 use bevy::prelude::*;
 
 use crate::{
-    car::{Car, Player},
+    car::Car,
     parallax::{ParallaxImages, ParallaxSprite},
     trigger::Target,
 };

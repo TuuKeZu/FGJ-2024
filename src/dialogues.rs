@@ -96,8 +96,8 @@ impl DialogueState {
         dialogues: &mut ResMut<Assets<DialogueList>>,
         dialogue: &Res<DialogueHandle>,
     ) {
-        dbg!(name);
-        if let Some(dialogue) = dialogues.remove(dialogue.0.id()) {
+        if let Some(dialogue) = dialogues.get(dialogue.0.id()) {
+            dbg!(name);
             self.current = dialogue.get(name);
             self.active = true;
             self.timer = Timer::new(Duration::from_secs(1), TimerMode::Repeating);
@@ -131,7 +131,8 @@ impl DialogueBundle {
             ])
             .with_style(Style {
                 position_type: PositionType::Absolute,
-                left: Val::Percent(50.),
+                width: Val::Percent(50.),
+                left: Val::Percent(25.),
                 bottom: Val::Px(constants.ui.fps_text_padding),
                 ..default()
             }),

@@ -10,7 +10,7 @@ pub fn setup_graphics(mut commands: Commands) {
 pub fn setup_physics(mut commands: Commands) {
     let car = CarBundle::spawn(&mut commands)
         .with_player()
-        .at(Vec2::new(200., 200.))
+        .at(Vec2::new(16_355.2, 10_900.))
         .id();
     commands.entity(car).with_children(|parent| {
         parent.spawn(PointerBundle::new());

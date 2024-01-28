@@ -1,7 +1,7 @@
 //! Generic assets that may have colliders and anchors
 
+use bevy::prelude::*;
 use bevy::sprite::Anchor;
-use bevy::{prelude::*, transform::commands};
 use bevy_rapier2d::prelude::*;
 
 use crate::constants::PX_SIZE;

@@ -78,8 +78,8 @@ impl Default for CarConstants {
             max_speed: 1000.,
             max_backing_speed: 200.,
             acceleration: 70.,
-            max_steer: std::f32::consts::PI / 6.0,
-            breaking_force: 150.,
+            max_steer: std::f32::consts::PI / 6.,
+            breaking_force: 200.,
         }
     }
 }
@@ -95,8 +95,8 @@ pub struct UiConstants {
 impl Default for UiConstants {
     fn default() -> Self {
         Self {
-            font_size: 20.,
-            fps_text_padding: 10.,
+            font_size: 50.,
+            fps_text_padding: 20.,
             font_color: Color::rgb(255., 255., 255.),
         }
     }

@@ -29,10 +29,7 @@ pub struct CarBundle {
 }
 
 impl CarBundle {
-    pub fn spawn<'c, 'w, 's>(
-        commands: &'c mut Commands<'w, 's>,
-        constants: &Constants,
-    ) -> CarHandle<'c, 'w, 's> {
+    pub fn spawn<'c, 'w, 's>(commands: &'c mut Commands<'w, 's>) -> CarHandle<'c, 'w, 's> {
         let sprite = Sprite {
             custom_size: Some(CAR_SPRITE_SCALE * Vec2::new(64., 64.)), // TODO sprite scaling
             ..Default::default()

@@ -15,7 +15,7 @@ pub enum Building {
 }
 
 impl Building {
-    fn get_parallax_images(&self, _constants: Constants) -> ParallaxImages {
+    fn get_parallax_images(&self) -> ParallaxImages {
         use Building::*;
         let sprite = Sprite {
             custom_size: Some(Vec2::new(192. * BUILDING_SCALE, 16. * BUILDING_SCALE)),
@@ -64,11 +64,11 @@ pub struct BuildingBundle {
 }
 
 impl BuildingBundle {
-    pub fn spawn(commands: &mut Commands, constants: Res<Constants>) {
+    pub fn spawn(commands: &mut Commands) {
         let building = BuildingBundle {
             building: Building::Building1,
             sprite: ParallaxSprite {
-                images: Building::Building1.get_parallax_images(*constants),
+                images: Building::Building1.get_parallax_images(),
                 // ..Default::default()
                 visibility: VisibilityBundle::default(),
                 transform: TransformBundle::default(),

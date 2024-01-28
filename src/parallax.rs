@@ -80,7 +80,7 @@ pub fn add_layers(
             let handle = asset_server.load(path);
             // dbg!(&handle);
             let mut ta = None;
-            for (id, ta2) in texture_atlases.iter() {
+            for (_id, ta2) in texture_atlases.iter() {
                 if ta2.texture == handle {
                     // println!("Skipping {handle:?}");
                     ta = Some(ta2.clone()); // TODO is clone required

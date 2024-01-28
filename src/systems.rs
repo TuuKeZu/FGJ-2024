@@ -32,8 +32,9 @@ pub fn camera_follow(
 
     // The camera target is `lookahead` seconds in front of car
     let camera_target_pos = car_pos + constants.camera.lookahead * car_vel;
-    let camera_target_scale =
-        1. + constants.camera.height_speed_factor * car_vel.length() / constants.car.max_speed;
+    let camera_target_scale = (1.
+        + constants.camera.height_speed_factor * car_vel.length() / constants.car.max_speed)
+        * constants.camera.scale;
     // TODO: Should the height scale with speed? This creates weird "zoom out" effect
     let camera_target_height = constants.camera.height * camera_target_scale;
 

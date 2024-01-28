@@ -4,8 +4,7 @@ use bevy::render::color::Color;
 use bevy_inspector_egui::inspector_options::ReflectInspectorOptions;
 use bevy_inspector_egui::InspectorOptions;
 
-// XXX
-pub const TILE_SIZE: f32 = 400.;
+pub const TILE_SIZE: f32 = 900.;
 pub const TILE_PX_PER_UNIT: f32 = 192. / TILE_SIZE;
 
 #[derive(Resource, Clone, Copy, Reflect, Default, InspectorOptions)]
@@ -29,6 +28,8 @@ pub struct CarConstants {
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct CameraConstants {
+    #[inspector(min = 0.1, max = 5.0)]
+    pub scale: f32,
     #[inspector(min = 1.0, max = 700.0)]
     pub height: f32,
     #[inspector(min = 0.0, max = 3.0)]
@@ -42,6 +43,7 @@ pub struct CameraConstants {
 impl Default for CameraConstants {
     fn default() -> Self {
         Self {
+            scale: 1.3,
             height: 50.,
             height_speed_factor: 1.,
             lookahead: 1.,

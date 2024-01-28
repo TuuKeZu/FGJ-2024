@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::Collider;
 
 use crate::{
     constants::TILE_SIZE,
@@ -113,14 +114,15 @@ fn try_spawn_pavement(
                         cb,
                         (
                             Piece::new("sidewalk"),
-                            PieceMeta::new(
-                                tr(Transform::from_xyz(dx, dy, 0.5)),
-                                None,
-                                //Some(Collider::cuboid(10., 10.)),
-                                None,
-                            ),
+                            PieceMeta::new(tr(Transform::from_xyz(dx, dy, 0.5)), None, None),
                         ),
                     );
+
+                    let ninety = std::f32::consts::PI / 2.;
+                    // let quat = Quat::from_rotation_z(dx.signum() * ninety);
+                    let mut t = Transform::from_xyz(dx, dy, 0.6);
+                    t.rotate_z(-dx.signum() * ninety);
+                    spawn_as_child(cb, (Piece::new("curb"), PieceMeta::new(tr(t), None, None)));
                 }
             }
             let parity = ((tile.pos.x + tile.pos.y) as i32).rem_euclid(2);
@@ -175,6 +177,38 @@ fn spawn_pieces(cb: &mut ChildBuilder, tile: &Tile) {
                 if let Ok(_) = try_spawn_pavement(cb, &rotated_tile, tr) {
                     break;
                 }
+            }
+        }
+        TileType::Building => {
+            for rot_count in 0..4 {
+                let rotated_tile = Tile {
+                    neighbors: tile.neighbors.rotate_ccw(-rot_count),
+                    ..tile.clone()
+                };
+                let angle = rot_count as f32 * std::f32::consts::PI / 2.;
+                let quat = Quat::from_rotation_z(angle);
+                let tr = |mut transform: Transform| {
+                    transform.rotate_around(Vec3::ZERO, quat);
+                    transform
+                };
+                spawn_as_child(
+                    cb,
+                    (
+                        Piece::new("building2"),
+                        PieceMeta::new(
+                            tr(Transform::default()),
+                            Some(Collider::cuboid(TILE_SIZE / 2., TILE_SIZE / 2.0)),
+                            Some(bevy::sprite::Anchor::Custom(Vec2::new(0., 6.))),
+                        ),
+                    ),
+                );
+                spawn_as_child(
+                    cb,
+                    (
+                        Piece::new("ceiling2"),
+                        PieceMeta::new(tr(Transform::default()), None, None),
+                    ),
+                );
             }
         }
         _ => {}

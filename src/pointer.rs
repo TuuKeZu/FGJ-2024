@@ -23,7 +23,7 @@ impl PointerBundle {
             pointer: Pointer {},
             sprite_bundle: ParallaxSprite {
                 visibility: VisibilityBundle::default(),
-                transform: TransformBundle::default(),
+                transform: Transform::from_xyz(0., 0., 2.).into(),
                 images: ParallaxImages::new(
                     "arrow",
                     Sprite {

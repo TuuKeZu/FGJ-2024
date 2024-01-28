@@ -242,6 +242,8 @@ pub fn car_control(
             steering += -constants.car.max_steer;
         }
 
+        steering *= (-velocity.abs() * 0.001).exp();
+
         for &t in car_tires {
             if let Ok((mut tire, mut joint)) = tires.get_mut(t) {
                 tire.force.y += acceleration_force;

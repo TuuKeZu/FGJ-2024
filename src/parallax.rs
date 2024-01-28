@@ -80,14 +80,22 @@ pub fn add_layers(
     {
         commands.entity(entity).with_children(|parent| {
             let handle = asset_server.load(path);
-            let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
+            // dbg!(&handle);
+            let mut ta = None;
+            for (id, ta2) in texture_atlases.iter() {
+                if ta2.texture == handle {
+                    // println!("Skipping {handle:?}");
+                    ta = Some(ta2.clone()); // TODO is clone required
+                    break;
+                }
+            }
+            let ta = ta.unwrap_or_else(|| {
+                println!("Loading {handle:?}");
+                TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None)
+            });
+            // dbg!(&ta);
             let tah = texture_atlases.add(ta);
-            // TODO
-            // let tah = asset_server.get_handle(path).unwrap_or_else(|| {
-            //     let handle = asset_server.load(path);
-            //     let ta = TextureAtlas::from_grid(handle, *tile_size, *columns, *rows, None, None);
-            //     texture_atlases.add(ta)
-            // });
+            // dbg!(&tah);
 
             for (index, height, sprite) in indices_heights_sprites {
                 let sprite = TextureAtlasSprite {

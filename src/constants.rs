@@ -19,7 +19,7 @@ pub struct Constants {
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct CarConstants {
-    pub size: Vec2,
+    pub scale: f32,
     pub acceleration: f32,
     pub breaking_force: f32,
     pub max_speed: f32,
@@ -29,7 +29,7 @@ pub struct CarConstants {
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
 pub struct BuildingConstants {
-    pub size: Vec2,
+    pub scale: f32,
 }
 #[derive(Clone, Copy, Resource, Reflect, InspectorOptions)]
 #[reflect(InspectorOptions)]
@@ -60,10 +60,12 @@ impl Default for TriggerConstants {
     }
 }
 
+pub const CAR_COLLIDER_SIZE_PX: Vec2 = Vec2::new(14., 38.);
+
 impl Default for CarConstants {
     fn default() -> Self {
         Self {
-            size: Vec2::new(42., 114.),
+            scale: 3.0,
             max_speed: 5000.,
             max_backing_speed: 200.,
             acceleration: 70.,
@@ -75,9 +77,7 @@ impl Default for CarConstants {
 
 impl Default for BuildingConstants {
     fn default() -> Self {
-        Self {
-            size: Vec2::new(64., 8.),
-        }
+        Self { scale: 2.0 }
     }
 }
 

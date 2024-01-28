@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use crate::constants::CAR_COLLIDER_SIZE_PX;
 use crate::{
     constants::Constants,
     parallax::{ParallaxImages, ParallaxSprite},
@@ -33,10 +34,7 @@ impl CarBundle {
         constants: Res<Constants>,
     ) -> CarHandle<'c, 'w, 's> {
         let sprite = Sprite {
-            custom_size: Some(Vec2::new(
-                2. * constants.car.size.x,
-                2. * constants.car.size.y,
-            )),
+            custom_size: Some(Vec2::new(constants.car.scale, constants.car.scale)),
             ..Default::default()
         };
 
@@ -65,7 +63,11 @@ impl CarBundle {
         let car = commands
             .spawn(car)
             .insert(RigidBody::Dynamic)
-            .insert(Collider::cuboid(constants.car.size.x, constants.car.size.y))
+            .insert(GravityScale(0.))
+            .insert(Collider::cuboid(
+                CAR_COLLIDER_SIZE_PX.x,
+                CAR_COLLIDER_SIZE_PX.y,
+            )) // TODO this is 3x too small
             .insert(ColliderMassProperties::Mass(0.1))
             .insert(ReadMassProperties::default())
             .insert(Velocity::default())

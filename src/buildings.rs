@@ -16,23 +16,35 @@ impl Building {
         use Building::*;
         let sprite = Sprite {
             custom_size: Some(Vec2::new(
-                10. * constants.building.size.x,
-                10. * constants.building.size.y,
+                192. * constants.building.scale, // TODO fix scaling
+                16. * constants.building.scale,
             )),
             ..Default::default()
         };
         match *self {
             Building1 => {
                 // TODO utility for this
-                let indices_heights_sprites = (0..32)
-                    .map(|index| ((256 - 7 - index) % 8, index as f32 + 0.5, sprite.clone())) // A building starts at height 0.5 with sprite 0
+
+                let indices = [
+                    // Increasing bottom to top
+                    0, 1, 1, // Ground level
+                    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, // Windows
+                    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, // Windows
+                    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, // Windows
+                    3, 3, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, // Windows
+                    6, 6, 7, 7, 8, 9, 9, 9, 9, 10, 10, 9, 9, 11, 11, 11,
+                ];
+                let indices_heights_sprites = indices
+                    .into_iter()
+                    .enumerate()
+                    .map(|(n, index)| (11 - index, n as f32 * 0.25 + 0.5, sprite.clone()))
                     .collect::<Vec<_>>();
                 ParallaxImages::new(
-                    "building1/building1_atlas.png",
+                    "building2/building2.png",
                     indices_heights_sprites,
-                    Vec2::new(64.0, 8.0),
+                    Vec2::new(192.0, 16.0),
                     1,
-                    8,
+                    12,
                 )
             }
         }
@@ -61,8 +73,8 @@ impl BuildingBundle {
             .spawn(building)
             .insert(RigidBody::Fixed)
             .insert(Collider::cuboid(
-                constants.building.size.x,
-                constants.building.size.y,
+                192.0 / 2.0 * constants.building.scale,
+                4.0 / 2.0 * constants.building.scale,
             ));
     }
 }

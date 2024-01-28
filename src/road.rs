@@ -27,10 +27,9 @@ impl RoadTexture {
             PavementCross => "pavement_cross",
         };
         let sprite = Sprite {
-            // custom_size: Some(Vec2::new(
-            //     2. * constants.car.size.x,
-            //     2. * constants.car.size.y,
-            // )),
+            custom_size: Some(Vec2::new(
+                64., 64., // TODO road scale
+            )),
             ..Default::default()
         };
 

@@ -2,6 +2,7 @@ use bevy::prelude::*;
 
 use crate::{
     constants::TILE_SIZE,
+    piece::{Piece, PieceBundle},
     road::{Road, RoadBundle},
 };
 
@@ -102,24 +103,23 @@ fn try_spawn_pavement(
             Ok(())
         }
         [_, false, true, false] => {
-            info!("pystytie {tile:?}");
-            cb.spawn(RoadBundle::new(
-                Road::new("pavement"),
-                tr(Transform::from_xyz(0., -TILE_SIZE / 3., 0.)),
-            ));
-            cb.spawn(RoadBundle::new(
-                Road::new("pavement"),
-                tr(Transform::from_xyz(0., 0., 0.)),
-            ));
-            cb.spawn(RoadBundle::new(
-                Road::new("pavement"),
-                tr(Transform::from_xyz(0., TILE_SIZE / 3., 0.)),
-            ));
+            for dy in [-TILE_SIZE / 3., 0., TILE_SIZE / 3.] {
+                cb.spawn(RoadBundle::new(
+                    Road::new("pavement"),
+                    tr(Transform::from_xyz(0., dy, 0.)),
+                ));
+                for dx in [-TILE_SIZE / 3., TILE_SIZE / 3.] {
+                    cb.spawn(PieceBundle::new(
+                        Piece::new("sidewalk", None, None),
+                        tr(Transform::from_xyz(dx, dy, 0.5)),
+                    ));
+                }
+            }
             Ok(())
         }
         [false, true, true, false] => {
-            cb.spawn(RoadBundle::new(
-                Road::new("pavement_turn"),
+            cb.spawn(PieceBundle::new(
+                Piece::new("pavement_turn", None, None),
                 tr(Transform::default()),
             ));
             Ok(())

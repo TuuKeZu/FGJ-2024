@@ -1,6 +1,4 @@
-//! Road elements such as pavement
-//!
-//! Can render any static elements with the same image dimensions as pavement.
+//! Sidewalk elements
 
 use bevy::prelude::*;
 
@@ -10,12 +8,11 @@ use crate::{
 };
 
 #[derive(Component)]
-pub struct Road {
+pub struct Sidewalk {
     pub texture: String,
 }
 
-impl Road {
-    #[deprecated(since = "0.0.0", note = "please use `Piece` instead of `Road`")]
+impl Sidewalk {
     pub fn new(texture: impl Into<String>) -> Self {
         Self {
             texture: texture.into(),
@@ -24,20 +21,22 @@ impl Road {
 }
 
 #[derive(Bundle)]
-pub struct RoadBundle {
-    piece: Road,
+pub struct SidewalkBundle {
+    piece: Sidewalk,
     sprite: ParallaxSprite,
 }
 
-impl RoadBundle {
-    pub fn new(piece: Road, transform: Transform) -> Self {
+impl SidewalkBundle {
+    pub fn new(piece: Sidewalk, transform: Transform) -> Self {
         Self {
             sprite: ParallaxSprite {
                 transform: transform.into(),
                 visibility: Default::default(),
-                images: ParallaxImages::new_default(&piece.texture),
+                images: ParallaxImages::new(&piece.texture, Default::default()),
             },
             piece,
         }
     }
 }
+
+// TODO sidewalk border

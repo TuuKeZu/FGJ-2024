@@ -29,6 +29,7 @@ mod constants;
 mod dialogues;
 mod missions;
 mod parallax;
+mod piece;
 mod pointer;
 mod road;
 mod systems;

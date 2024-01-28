@@ -74,7 +74,7 @@ impl TileBundle {
         TileBundle {
             spatial: SpatialBundle {
                 transform: dbg!(Transform::from_translation(
-                    (tile.pos * TILE_SIZE).extend(-100.)
+                    (tile.pos * TILE_SIZE).extend(-0.1)
                 )),
                 ..Default::default()
             },

@@ -3,6 +3,8 @@ use crate::systems::*;
 use crate::tilemap::setup_tilemap;
 use crate::ui::*;
 use atlas_loader::setup_atlases;
+use bevy::window::WindowMode;
+use bevy::window::WindowResolution;
 use bevy::{
     asset::AssetMetaCheck, diagnostic::FrameTimeDiagnosticsPlugin,
     input::common_conditions::input_toggle_active, prelude::*,
@@ -39,18 +41,24 @@ use pointer::handle_pointer;
 use pointer::setup_pointer;
 use trigger::{handle_trigger_collisions, setup_trigger};
 
+pub fn window_primary() -> Window {
+    Window {
+        canvas: Some("#tango-driver-canvas".into()),
+        title: String::from("Tango Driver"),
+        //present_mode: bevy::window::PresentMode::Immediate,
+        fit_canvas_to_parent: true,
+        resolution: WindowResolution::new(1920., 1080.).with_scale_factor_override(1.),
+        mode: WindowMode::Windowed,
+        ..default()
+    }
+}
+
 fn main() {
     let plugins = (
         DefaultPlugins
             .set(ImagePlugin::default_nearest())
             .set(WindowPlugin {
-                primary_window: Some(Window {
-                    // provide the ID selector string here
-                    canvas: Some("#tango-driver-canvas".into()),
-                    fit_canvas_to_parent: true,
-                    // ... any other window properties ...
-                    ..default()
-                }),
+                primary_window: Some(window_primary()),
                 ..Default::default()
             }),
         AppState::splash_screen(),
@@ -71,7 +79,6 @@ fn main() {
         handle_dialogue_ui,
         handle_trigger_collisions,
         car_control,
-        update_dialogue,
         handle_pointer,
     );
     let startup = (

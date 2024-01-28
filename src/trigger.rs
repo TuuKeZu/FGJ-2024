@@ -1,7 +1,12 @@
 use bevy::prelude::*;
+use bevy_inspector_egui::InspectorOptions;
 use bevy_rapier2d::{prelude::*, rapier::geometry::CollisionEventFlags};
 
-use crate::{constants::Constants, missions::MissionState};
+use crate::{
+    constants::Constants,
+    dialogues::{DialogueHandle, DialogueList, DialogueState},
+    missions::MissionState,
+};
 
 #[derive(Component)]
 pub struct Trigger {}
@@ -9,7 +14,7 @@ pub struct Trigger {}
 #[derive(Component)]
 pub struct Target {}
 
-#[derive(Debug, Clone, Copy, Component)]
+#[derive(Debug, Clone, Copy, Component, InspectorOptions)]
 pub enum TriggerType {
     StartMission,
     StopMission,
@@ -26,10 +31,10 @@ pub struct TriggerBundle {
 }
 
 impl TriggerBundle {
-    pub fn new(_trigger_type: TriggerType, constants: &Res<Constants>) -> Self {
+    pub fn new(trigger_type: TriggerType, constants: &Res<Constants>) -> Self {
         Self {
             trigger: Trigger {},
-            trigger_type: TriggerType::StartMission,
+            trigger_type,
             sprite: SpriteBundle {
                 transform: Transform {
                     translation: Vec3::new(-200., -200., 0.),
@@ -75,6 +80,9 @@ pub fn handle_trigger_collisions(
     mut mission_state: ResMut<MissionState>,
     spawn_q: Query<(Entity, &TriggerType), With<Trigger>>,
     constants: Res<Constants>,
+    mut dialogue_state: ResMut<DialogueState>,
+    mut dialogues: ResMut<Assets<DialogueList>>,
+    dialogue: Res<DialogueHandle>,
 ) {
     // let mut car_state = car_q.get_single_mut().unwrap();
 
@@ -103,10 +111,23 @@ pub fn handle_trigger_collisions(
                 if let Some(trigger_type) = sensor.map(|(_, t)| t) {
                     match trigger_type {
                         TriggerType::StartMission => {
+                            if mission_state.mission_active {
+                                return;
+                            }
                             commands.entity(sensor.unwrap().0).despawn();
-                            mission_state.next_target(&mut commands, &constants);
+                            let mission_idx = mission_state.next_target(&mut commands, &constants);
+
+                            dialogue_state.load_dialogue(
+                                &format!("p{}", mission_idx.unwrap()),
+                                &mut dialogues,
+                                &dialogue,
+                            );
                         }
                         TriggerType::StopMission => {
+                            if !mission_state.mission_active {
+                                return;
+                            }
+
                             commands.entity(sensor.unwrap().0).despawn();
                             mission_state.next_target(&mut commands, &constants);
                         }

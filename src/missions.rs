@@ -52,13 +52,18 @@ impl MissionState {
             });
     }
 
-    pub fn next_target(&mut self, commands: &mut Commands, constants: &Res<Constants>) {
+    pub fn next_target(
+        &mut self,
+        commands: &mut Commands,
+        constants: &Res<Constants>,
+    ) -> Option<usize> {
         let idx = self.target_idx.unwrap();
         self.target_idx = Some(idx + 1);
         self.mission_active = !self.mission_active;
         self.current_target = Some(MISSION_TARGETS[idx + 1]);
 
         self.spawn_current_target(commands, constants);
+        Some((f32::ceil(self.target_idx.unwrap() as f32 / 2.)) as usize)
     }
 }
 

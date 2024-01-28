@@ -1,12 +1,7 @@
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-use crate::{
-    buildings::*,
-    car::*,
-    constants::Constants,
-    dialogues::{DialogueHandle, DialogueList, DialogueState},
-};
+use crate::{buildings::*, car::*, constants::Constants};
 
 pub fn setup_graphics(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
@@ -55,14 +50,4 @@ pub fn camera_follow(
 
     camera_transform.translation = Vec3::new(camera_pos.x, camera_pos.y, camera_height);
     camera_projection.scale = camera_scale;
-}
-
-pub fn update_dialogue(
-    mut dialogue_state: ResMut<DialogueState>,
-    dialogues: ResMut<Assets<DialogueList>>,
-    dialogue: Res<DialogueHandle>,
-) {
-    if !dialogue_state.active {
-        dialogue_state.load_dialogue("p1", dialogues, dialogue);
-    }
 }

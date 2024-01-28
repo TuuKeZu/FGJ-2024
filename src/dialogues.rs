@@ -93,13 +93,14 @@ impl DialogueState {
     pub fn load_dialogue(
         &mut self,
         name: &str,
-        mut dialogues: ResMut<Assets<DialogueList>>,
-        dialogue: Res<DialogueHandle>,
+        dialogues: &mut ResMut<Assets<DialogueList>>,
+        dialogue: &Res<DialogueHandle>,
     ) {
+        dbg!(name);
         if let Some(dialogue) = dialogues.remove(dialogue.0.id()) {
             self.current = dialogue.get(name);
             self.active = true;
-            self.timer = Timer::new(Duration::from_secs(2), TimerMode::Repeating);
+            self.timer = Timer::new(Duration::from_secs(1), TimerMode::Repeating);
         }
     }
 }

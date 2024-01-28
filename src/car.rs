@@ -116,6 +116,21 @@ impl CarBundle {
                 .insert(ImpulseJoint::new(car, joint))
                 .insert(Collider::round_cuboid(1., 10., 0.1))
                 .insert(ColliderDebugColor(Color::rgb(1., 0., 1.)));
+
+            // Spawn headlights
+            parent.spawn(ParallaxSprite {
+                images: ParallaxImages::new(
+                    "headlights",
+                    Sprite {
+                        ..Default::default()
+                    },
+                ),
+                transform: TransformBundle {
+                    local: Transform::from_translation(Vec3::new(0., CAR_SPRITE_SCALE * 32., 0.)),
+                    ..Default::default()
+                },
+                visibility: Default::default(),
+            });
         });
 
         CarHandle(commands, car)

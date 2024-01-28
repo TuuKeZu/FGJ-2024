@@ -76,3 +76,11 @@ columns = 1
 rows = 2
 parallax = [0, 1]
 parallax_z = 1.6
+
+[headlights]
+path = "headlights/headlights.png"
+size = [64, 64]
+columns = 1
+rows = 1
+parallax = [0, 0]
+parallax_z = 0.5

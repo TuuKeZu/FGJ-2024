@@ -1,7 +1,5 @@
 use bevy::prelude::*;
 
-use crate::constants::Constants;
-
 pub struct ParallaxPlugin;
 
 impl Plugin for ParallaxPlugin {
@@ -127,7 +125,6 @@ pub fn move_layers(
         (TransformHelper, Query<(&mut ParallaxHeight, &Parent)>),
         Query<(&ParallaxHeight, &mut Transform)>,
     )>,
-    constants: Res<Constants>,
 ) {
     let (transform_helper, mut height_query) = transform_params.p0();
     // Start by finding camera position
@@ -136,6 +133,7 @@ pub fn move_layers(
         .compute_global_transform(camera)
         .unwrap()
         .translation();
+    let camera_height = camera_pos.z;
 
     // ... then collect offsets to ParallaxHeight
     for (mut height, parent) in height_query.iter_mut() {
@@ -152,8 +150,7 @@ pub fn move_layers(
 
     // ... and finally apply transform from ParallaxHeight
     for (height, mut transform) in transform_params.p1().iter_mut() {
-        let scale_factor = constants.camera.camera_height
-            / (constants.camera.camera_height - height.pos.z).max(0.);
+        let scale_factor = camera_height / (camera_height - height.pos.z).max(0.);
         transform.translation = height.pos;
         transform.translation.x *= scale_factor - 1.;
         transform.translation.y *= scale_factor - 1.;

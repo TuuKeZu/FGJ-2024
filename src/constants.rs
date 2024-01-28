@@ -35,12 +35,23 @@ pub struct BuildingConstants {
 #[reflect(InspectorOptions)]
 pub struct CameraConstants {
     #[inspector(min = 1.0, max = 700.0)]
-    pub camera_height: f32,
+    pub height: f32,
+    #[inspector(min = 0.0, max = 3.0)]
+    pub height_speed_factor: f32,
+    #[inspector(min = 0.0, max = 3.0)]
+    pub lookahead: f32,
+    #[inspector(min = 0.1, max = 3.0)]
+    pub easing_speed: f32,
 }
 
 impl Default for CameraConstants {
     fn default() -> Self {
-        Self { camera_height: 50. }
+        Self {
+            height: 50.,
+            height_speed_factor: 1.,
+            lookahead: 1.,
+            easing_speed: 2.,
+        }
     }
 }
 

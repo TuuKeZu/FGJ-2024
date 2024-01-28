@@ -31,7 +31,7 @@ pub struct CarBundle {
 impl CarBundle {
     pub fn spawn<'c, 'w, 's>(
         commands: &'c mut Commands<'w, 's>,
-        constants: Res<Constants>,
+        constants: &Constants,
     ) -> CarHandle<'c, 'w, 's> {
         let sprite = Sprite {
             custom_size: Some(Vec2::new(constants.car.scale, constants.car.scale)),

@@ -53,7 +53,7 @@ impl CarBundle {
             .insert(Collider::cuboid(
                 CAR_COLLIDER_SIZE_PX.x,
                 CAR_COLLIDER_SIZE_PX.y,
-            )) // TODO this is 3x too small
+            ))
             .insert(ColliderMassProperties::Mass(0.1))
             .insert(ReadMassProperties::default())
             .insert(Velocity::default())

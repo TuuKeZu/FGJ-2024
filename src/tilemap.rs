@@ -1,8 +1,9 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 use crate::{
     constants::TILE_SIZE,
-    piece::{Piece, PieceBundle},
+    piece::*,
     road::{Road, RoadBundle},
 };
 
@@ -109,19 +110,25 @@ fn try_spawn_pavement(
                     tr(Transform::from_xyz(0., dy, 0.)),
                 ));
                 for dx in [-TILE_SIZE / 3., TILE_SIZE / 3.] {
-                    cb.spawn(PieceBundle::new(
-                        Piece::new("sidewalk", None, None),
-                        tr(Transform::from_xyz(dx, dy, 0.5)),
-                    ));
+                    spawn_as_child(
+                        cb,
+                        Piece::new("sidewalk"),
+                        PieceMeta::new(
+                            tr(Transform::from_xyz(dx, dy, 0.5)),
+                            Some(Collider::cuboid(10., 10.)),
+                            None,
+                        ),
+                    );
                 }
             }
             Ok(())
         }
         [false, true, true, false] => {
-            cb.spawn(PieceBundle::new(
-                Piece::new("pavement_turn", None, None),
-                tr(Transform::default()),
-            ));
+            spawn_as_child(
+                cb,
+                Piece::new("pavement_turn"),
+                PieceMeta::new(tr(Transform::default()), None, None),
+            );
             Ok(())
         }
         _ => Err(()),

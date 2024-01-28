@@ -46,7 +46,7 @@ impl Default for CameraConstants {
         Self {
             scale: 1.3,
             height: 50.,
-            height_speed_factor: 1.,
+            height_speed_factor: 0.3,
             lookahead: 1.,
             easing_speed: 2.,
         }
@@ -75,7 +75,7 @@ pub const CAR_SPRITE_SCALE: f32 = 6.0;
 impl Default for CarConstants {
     fn default() -> Self {
         Self {
-            max_speed: 5000.,
+            max_speed: 1000.,
             max_backing_speed: 200.,
             acceleration: 70.,
             max_steer: std::f32::consts::PI / 6.0,
